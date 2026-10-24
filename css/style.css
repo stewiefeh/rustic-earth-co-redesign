@@ -78,9 +78,11 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 }
 .nav-row a:hover,.nav-row a[aria-current]{color:var(--turmeric);border-color:var(--turmeric)}
 @media(max-width:720px){
-  .nav-row{justify-content:flex-start;gap:1.1rem}
+  .nav-row{flex-wrap:wrap;justify-content:center;gap:.4rem 1.05rem;overflow-x:visible;padding:8px 14px 12px}
+  .nav-row a{padding-bottom:3px}
   .head-inner{padding-top:10px}
   .brand img{width:46px;height:46px}
+  .hero .veil{background:linear-gradient(180deg,rgba(34,26,18,.62) 0%,rgba(34,26,18,.34) 34%,rgba(34,26,18,.26) 55%,rgba(34,26,18,.66) 82%,rgba(34,26,18,.96) 100%)}
 }
 
 /* ---------- hero ---------- */
