@@ -1,23 +1,6 @@
-/* Rustic Earth redesign — reveals + header state. No dependencies. */
+/* Rustic Earth redesign — header state. Reveals are CSS scroll-driven
+   (see style.css); no-JS and reduced-motion users get the full page. */
 (function () {
-  document.documentElement.classList.add("js");
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var reveals = document.querySelectorAll(".reveal");
-
-  if (reduced || !("IntersectionObserver" in window)) {
-    reveals.forEach(function (el) { el.classList.add("in"); });
-  } else {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in");
-          io.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });
-    reveals.forEach(function (el) { io.observe(el); });
-  }
-
   var head = document.getElementById("siteHead");
   var onScroll = function () {
     head.classList.toggle("scrolled", window.scrollY > 40);
