@@ -51,6 +51,7 @@ for _k in M:
     M[_k]['desc'] = _clean_desc(M[_k].get('desc'))
 
 BY_SLUG = {p['slug']: p for p in M.values()}
+SKUS = json.load(open(ROOT + '/build/data/skus.json'))
 
 def esc(s): return H.escape(str(s or ''), quote=True)
 
@@ -70,7 +71,8 @@ if os.path.isdir(pdir):
         IMG_EXT[os.path.splitext(f)[0]] = f
 def img_path(p, prefix=''):
     f = IMG_EXT.get(p['slug'])
-    return (prefix + 'images/products/' + f) if f else None
+    if f: return prefix + 'images/products/' + f
+    return prefix + 'images/products/placeholder.png'
 
 CATS = [
   ('tea', 'Tea', 'Loose-leaf black, green, herbal and white teas, scooped to order.'),
@@ -150,7 +152,7 @@ def head(title, desc, prefix, extra=''):
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,640&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{prefix}css/style.css">
 {extra}</head>
-<body>
+<body data-root="{prefix}">
 '''
 
 def header(prefix, active=''):
@@ -174,6 +176,10 @@ def header(prefix, active=''):
     </a>
     <nav class="nav-row" aria-label="Primary">
 {links}    </nav>
+    <a class="cart-btn" href="{prefix}cart.html" aria-label="View cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8Z"/><path d="M9 7V5.6A3 3 0 0 1 12 3a3 3 0 0 1 3 2.6V7"/></svg>
+      <span class="cart-count" data-cart-count hidden>0</span>
+    </a>
   </div>
 </header>
 <main id="main" class="pagein">
@@ -206,8 +212,13 @@ def footer(prefix):
     </div>
     <div>
       <h4>Stay in the loop</h4>
-      <p style="font-size:.93rem">Ask about new arrivals, tastings and restocks:</p>
-      <p style="margin-top:8px"><a class="btn btn-primary" href="mailto:{EMAIL}?subject=Keep%20me%20in%20the%20loop" style="display:inline-flex">Email the shop</a></p>
+      <p style="font-size:.93rem">New arrivals, tastings and restocks:</p>
+      <form class="loop-form" data-loop>
+        <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email address">
+        <button class="btn btn-primary" type="submit">Sign up</button>
+      </form>
+      <p class="loop-note" data-loop-note hidden>Thanks! Your email app opens with everything filled in &mdash; hit send and the shop adds you to the list.</p>
+      <p style="margin-top:8px;font-size:.93rem"><a href="mailto:{EMAIL}" style="display:inline;padding:0">Prefer a plain email? Write to us.</a></p>
     </div>
   </div>
   <div class="wrap fineprint">
@@ -216,6 +227,7 @@ def footer(prefix):
   </div>
 </footer>
 <script src="{prefix}js/main.js" defer></script>
+<script src="{prefix}js/cart.js" defer></script>
 </body>
 </html>
 '''
@@ -291,6 +303,33 @@ def product_page(p, depth=2):
     if not stock: scls, stxt = 'in', 'In stock'
     elif 'Out' in stock: scls, stxt = 'out', 'Out of stock'
     else: scls, stxt = 'low', 'Low stock'
+    # purchase block: variants, quantity, add-to-cart
+    vs = SKUS.get(p['id'], [])
+    sold = (stock == 'Out of stock') or (vs and all(v['soldOut'] for v in vs))
+    if not vs:
+        buy = ''
+    elif sold:
+        buy = ('<div class="buy-box no-js-hide"><p class="sold-line">Sold out right now &mdash; '
+               'call <a href="tel:+1' + PHONE.replace('-', '') + '">' + PHONE + '</a> or ask in store about the next batch.</p></div>')
+    else:
+        opts = ''
+        if len(vs) > 1:
+            opts = '<label class="opt-label" for="vsel">Choose an option</label>\n        <div class="sel-wrap"><select id="vsel" data-variant>'
+            for v in vs:
+                mark = ' (sold out)' if v['soldOut'] else ''
+                dis = ' disabled' if v['soldOut'] else ''
+                opts += '<option value="%s"%s>%s</option>' % (v['id'], dis, esc(v['name'] + mark))
+            opts += '</select></div>'
+        addbtn = ('<button class="btn btn-primary add-btn" type="submit" data-add>Add to cart '
+                  '<span class="add-price" data-addprice>%s</span></button>' % esc(vs[0]['fmt']))
+        buy = ('<div class="buy-box">\n      <form data-buyform>\n        ' + opts +
+               '\n        <div class="qty-row">\n'
+               '          <button type="button" class="qty-btn" data-q="-1" aria-label="Decrease quantity">&minus;</button>\n'
+               '          <input class="qty-input" data-qty type="number" value="1" min="1" inputmode="numeric" aria-label="Quantity">\n'
+               '          <button type="button" class="qty-btn" data-q="1" aria-label="Increase quantity">+</button>\n'
+               '        </div>\n        ' + addbtn + '\n      </form>\n    </div>\n'
+               '    <script>window.RE_ITEM=' + json.dumps({'id': p['id'], 'slug': p['slug'], 'name': p['name'], 'img': img_path(p, '')}) +
+               ';window.RE_VARIANTS=' + json.dumps(vs) + ';</script>')
     ld = {
       "@context": "https://schema.org", "@type": "Product",
       "name": p['name'], "description": p['desc'],
@@ -317,8 +356,9 @@ def product_page(p, depth=2):
     <div class="pd-info">
       <p class="cat-tag"><a href="{cat_href}" style="color:inherit">{esc(cat_name)}</a></p>
       <h1>{esc(p['name'])}</h1>
-      <p class="pd-price">{esc(p['price']) if p['price'] else 'Ask in store'}</p>
+      <p class="pd-price" data-price>{esc(p['price']) if p['price'] else 'Ask in store'}</p>
       <span class="pd-stock {scls}">{stxt}</span>
+      {buy}
       <div class="pd-desc">{desc_paras}</div>
       <div class="get-box">
         <h3>How to get it</h3>
@@ -339,6 +379,41 @@ def product_page(p, depth=2):
     <h2>More from {esc(cat_name)}</h2>
     <div class="prod-grid">{rel_html}</div>
   </div>
+</div>
+''' + footer(prefix)
+
+
+# ---------- cart page ----------
+def cart_page(depth=1):
+    prefix = prefix_for(depth)
+    shop = {'email': EMAIL, 'phone': PHONE, 'freeAt': 75}
+    extra = ('<script>window.RE_SHOP=' + json.dumps(shop) + ';</script>')
+    return head('Your Cart | Rustic Earth Tea & Spice Co.', 'Review your order: items, quantities and total. Place it by email or phone; free shipping on orders over $75.', prefix, extra) + \
+      header(prefix, active='Cart') + f'''
+<div class="wrap page-head">
+  <p class="crumbs"><a href="{prefix}index.html">Home</a> &rsaquo; Cart</p>
+  <h1>Your cart</h1>
+</div>
+<div class="wrap cart-wrap">
+  <div id="cartRoot" class="cart-root">
+    <noscript><p class="cart-empty">The cart needs JavaScript. You can still order by phone at <a href="tel:+1{PHONE.replace('-','')}">{PHONE}</a> or by email at <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></noscript>
+  </div>
+  <aside class="cart-side no-js-hide" id="cartSide" hidden>
+    <div class="ship-track" data-shiptrack hidden>
+      <div class="ship-bar" data-shipbar></div>
+      <p class="ship-msg" data-shipmsg></p>
+    </div>
+    <div class="cart-sumline"><span>Subtotal</span><strong data-subtotal>$0.00</strong></div>
+    <p class="cart-fine">Shipping is free over $75. Below that, the shop quotes exact shipping when they confirm your order.</p>
+    <div class="cart-contact">
+      <h2>Your details</h2>
+      <label>Name<input data-cname type="text" autocomplete="name" placeholder="Your name"></label>
+      <label>Phone or email<input data-ccontact type="text" autocomplete="tel email" placeholder="So they can confirm"></label>
+    </div>
+    <button class="btn btn-primary place-btn" data-place>Place order by email</button>
+    <a class="btn btn-ghost call-btn" style="color:var(--bark);border-color:rgba(42,32,24,.4)" href="tel:+1{PHONE.replace('-','')}">Call your order in: {PHONE}</a>
+    <p class="cart-fine">Placing opens a prefilled email to the shop with your order. They confirm stock, payment and pickup or shipping by reply.</p>
+  </aside>
 </div>
 ''' + footer(prefix)
 
@@ -597,6 +672,7 @@ def main():
     for cat, name, _ in CATS:
         write(f'shop/{cat}.html', cat_page(cat, depth=1))
     write('shop/all-items.html', all_items_page(depth=1))
+    write('cart.html', cart_page(depth=1))
     for p in M.values():
         write(f"products/{p['slug']}/index.html", product_page(p, depth=2))
     write('locations/index.html', locations_index(depth=1))

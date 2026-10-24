@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,640&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/style.css">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "Smokey Bones Rub", "description": "Indulge your taste buds with the Smokey Bones Rub, a tantalizing blend of dark caramel, spicy chipotle, sweet bell pepper, and fruity notes of orange and chile pepper. This rich and aromatic combination will take your grilling to the next level. Don't miss out on the opportunity to elevate your dishes - add the Smokey Bones Rub to your cart now! \u00b7 Ingredients: Granulated molasses, demerara sugar, orange, smoked hickory salt, garlic, onion, chipotle, paprika and red bell pepper \u00b7 Suggested Use: Barbecue sauces and rubs, grilling, smoking, roasting", "brand": {"@type": "Brand", "name": "Rustic Earth Tea & Spice Co."}, "image": "https://stewiefeh.github.io/rustic-earth-co-redesign/images/products/smokey-bones-rub.png", "offers": {"@type": "Offer", "price": "4.95", "priceCurrency": "USD", "availability": "https://schema.org/OutOfStock"}}</script></head>
-<body>
+<body data-root="../../">
 <a class="visually-hidden" href="#main">Skip to content</a>
 <div class="promo"><strong>Free shipping</strong> on all orders over $75 &middot; two shops in South Jersey</div>
 <header class="site-head" id="siteHead">
@@ -34,6 +34,10 @@
 <a href="../../jobs/index.html">Jobs</a>
 <a href="https://squareup.com/gift/CBV15A5FB9AYA/order" target="_blank" rel="noopener">Gift Card</a>
     </nav>
+    <a class="cart-btn" href="../../cart.html" aria-label="View cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8Z"/><path d="M9 7V5.6A3 3 0 0 1 12 3a3 3 0 0 1 3 2.6V7"/></svg>
+      <span class="cart-count" data-cart-count hidden>0</span>
+    </a>
   </div>
 </header>
 <main id="main" class="pagein">
@@ -44,8 +48,9 @@
     <div class="pd-info">
       <p class="cat-tag"><a href="../../shop/spice.html" style="color:inherit">Spice</a></p>
       <h1>Smokey Bones Rub</h1>
-      <p class="pd-price">$4.95 - $15.95</p>
+      <p class="pd-price" data-price>$4.95 - $15.95</p>
       <span class="pd-stock out">Out of stock</span>
+      <div class="buy-box no-js-hide"><p class="sold-line">Sold out right now &mdash; call <a href="tel:+18562593498">856-259-3498</a> or ask in store about the next batch.</p></div>
       <div class="pd-desc"><p>Indulge your taste buds with the Smokey Bones Rub, a tantalizing blend of dark caramel, spicy chipotle, sweet bell pepper, and fruity notes of orange and chile pepper. This rich and aromatic combination will take your grilling to the next level. Don&#x27;t miss out on the opportunity to elevate your dishes - add the Smokey Bones Rub to your cart now! · Ingredients: Granulated molasses, demerara sugar, orange, smoked hickory salt, garlic, onion, chipotle, paprika and red bell pepper · Suggested Use: Barbecue sauces and rubs, grilling, smoking, roasting</p></div>
       <div class="get-box">
         <h3>How to get it</h3>
@@ -69,7 +74,7 @@
   <span class="p-info"><span class="name">Alaskan Pacific Salmon Seasoning</span><span class="price">$4.95 &ndash; $15.95</span></span>
 </a>
 <a class="p-card" href="../../products/brazilian-bbq-rub/">
-  <span class="p-thumb nophoto"><span class="stock low">Low stock</span><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.6 13.4 11 3.8H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+  <span class="p-thumb"><span class="stock low">Low stock</span><img src="../../images/products/placeholder.png" alt="Brazilian BBQ Rub" loading="lazy"></span>
   <span class="p-info"><span class="name">Brazilian BBQ Rub</span><span class="price">$5.95 &ndash; $15.95</span></span>
 </a>
 <a class="p-card" href="../../products/chipotle-honey-rub/">
@@ -108,8 +113,13 @@
     </div>
     <div>
       <h4>Stay in the loop</h4>
-      <p style="font-size:.93rem">Ask about new arrivals, tastings and restocks:</p>
-      <p style="margin-top:8px"><a class="btn btn-primary" href="mailto:rusticearthcompany@gmail.com?subject=Keep%20me%20in%20the%20loop" style="display:inline-flex">Email the shop</a></p>
+      <p style="font-size:.93rem">New arrivals, tastings and restocks:</p>
+      <form class="loop-form" data-loop>
+        <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email address">
+        <button class="btn btn-primary" type="submit">Sign up</button>
+      </form>
+      <p class="loop-note" data-loop-note hidden>Thanks! Your email app opens with everything filled in &mdash; hit send and the shop adds you to the list.</p>
+      <p style="margin-top:8px;font-size:.93rem"><a href="mailto:rusticearthcompany@gmail.com" style="display:inline;padding:0">Prefer a plain email? Write to us.</a></p>
     </div>
   </div>
   <div class="wrap fineprint">
@@ -118,5 +128,6 @@
   </div>
 </footer>
 <script src="../../js/main.js" defer></script>
+<script src="../../js/cart.js" defer></script>
 </body>
 </html>

@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,640&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/style.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "Blueberry Dark Balsamic", "description": null, "brand": {"@type": "Brand", "name": "Rustic Earth Tea & Spice Co."}, "offers": {"@type": "Offer", "price": "9.95", "priceCurrency": "USD", "availability": "https://schema.org/InStock"}}</script></head>
-<body>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "Blueberry Dark Balsamic", "description": null, "brand": {"@type": "Brand", "name": "Rustic Earth Tea & Spice Co."}, "image": "https://stewiefeh.github.io/rustic-earth-co-redesign/images/products/placeholder.png", "offers": {"@type": "Offer", "price": "9.95", "priceCurrency": "USD", "availability": "https://schema.org/InStock"}}</script></head>
+<body data-root="../../">
 <a class="visually-hidden" href="#main">Skip to content</a>
 <div class="promo"><strong>Free shipping</strong> on all orders over $75 &middot; two shops in South Jersey</div>
 <header class="site-head" id="siteHead">
@@ -34,18 +34,35 @@
 <a href="../../jobs/index.html">Jobs</a>
 <a href="https://squareup.com/gift/CBV15A5FB9AYA/order" target="_blank" rel="noopener">Gift Card</a>
     </nav>
+    <a class="cart-btn" href="../../cart.html" aria-label="View cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8Z"/><path d="M9 7V5.6A3 3 0 0 1 12 3a3 3 0 0 1 3 2.6V7"/></svg>
+      <span class="cart-count" data-cart-count hidden>0</span>
+    </a>
   </div>
 </header>
 <main id="main" class="pagein">
 <div class="wrap product-page">
   <p class="crumbs"><a href="../../index.html">Home</a> &rsaquo; <a href="../../shop/vinegar.html">Vinegar</a> &rsaquo; Blueberry Dark Balsamic</p>
   <div class="pd-grid">
-    <div class="pd-photo nophoto"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.6 13.4 11 3.8H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8Z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"/></svg></div>
+    <div class="pd-photo"><img src="../../images/products/placeholder.png" alt="Blueberry Dark Balsamic"></div>
     <div class="pd-info">
       <p class="cat-tag"><a href="../../shop/vinegar.html" style="color:inherit">Vinegar</a></p>
       <h1>Blueberry Dark Balsamic</h1>
-      <p class="pd-price">$9.95 - $24.95</p>
+      <p class="pd-price" data-price>$9.95 - $24.95</p>
       <span class="pd-stock in">In stock</span>
+      <div class="buy-box">
+      <form data-buyform>
+        <label class="opt-label" for="vsel">Choose an option</label>
+        <div class="sel-wrap"><select id="vsel" data-variant><option value="AR7OWNA27QY2ONQDGLJB3UMX">60ml</option><option value="2QNZB6UFVAOVG4QFV7AKEELS">375ml</option></select></div>
+        <div class="qty-row">
+          <button type="button" class="qty-btn" data-q="-1" aria-label="Decrease quantity">&minus;</button>
+          <input class="qty-input" data-qty type="number" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+          <button type="button" class="qty-btn" data-q="1" aria-label="Increase quantity">+</button>
+        </div>
+        <button class="btn btn-primary add-btn" type="submit" data-add>Add to cart <span class="add-price" data-addprice>$9.95</span></button>
+      </form>
+    </div>
+    <script>window.RE_ITEM={"id": "E467PARBM52RHOZELNBYWBIF", "slug": "blueberry-dark-balsamic", "name": "Blueberry Dark Balsamic", "img": "images/products/placeholder.png"};window.RE_VARIANTS=[{"id": "AR7OWNA27QY2ONQDGLJB3UMX", "name": "60ml", "price": 9.95, "fmt": "$9.95", "soldOut": false, "sku": "8345071"}, {"id": "2QNZB6UFVAOVG4QFV7AKEELS", "name": "375ml", "price": 24.95, "fmt": "$24.95", "soldOut": false, "sku": "3015"}];</script>
       <div class="pd-desc"></div>
       <div class="get-box">
         <h3>How to get it</h3>
@@ -108,8 +125,13 @@
     </div>
     <div>
       <h4>Stay in the loop</h4>
-      <p style="font-size:.93rem">Ask about new arrivals, tastings and restocks:</p>
-      <p style="margin-top:8px"><a class="btn btn-primary" href="mailto:rusticearthcompany@gmail.com?subject=Keep%20me%20in%20the%20loop" style="display:inline-flex">Email the shop</a></p>
+      <p style="font-size:.93rem">New arrivals, tastings and restocks:</p>
+      <form class="loop-form" data-loop>
+        <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email address">
+        <button class="btn btn-primary" type="submit">Sign up</button>
+      </form>
+      <p class="loop-note" data-loop-note hidden>Thanks! Your email app opens with everything filled in &mdash; hit send and the shop adds you to the list.</p>
+      <p style="margin-top:8px;font-size:.93rem"><a href="mailto:rusticearthcompany@gmail.com" style="display:inline;padding:0">Prefer a plain email? Write to us.</a></p>
     </div>
   </div>
   <div class="wrap fineprint">
@@ -118,5 +140,6 @@
   </div>
 </footer>
 <script src="../../js/main.js" defer></script>
+<script src="../../js/cart.js" defer></script>
 </body>
 </html>
