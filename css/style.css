@@ -99,7 +99,7 @@ a:hover { color: var(--cream); }
 .wordmark-star { color: var(--gold); display: grid; place-items: center; }
 .wordmark-text {
   font-family: var(--serif);
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.2;
@@ -108,7 +108,7 @@ a:hover { color: var(--cream); }
 .wordmark-text em {
   font-style: italic;
   font-weight: 400;
-  font-size: 0.78em;
+  font-size: 0.82em;
   color: var(--cream-dim);
   display: block;
   margin-top: -0.15em;
@@ -175,7 +175,7 @@ a:hover { color: var(--cream); }
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(to top, rgba(34, 26, 18, 0.94) 0%, rgba(34, 26, 18, 0.55) 38%, rgba(34, 26, 18, 0.18) 70%, rgba(34, 26, 18, 0.35) 100%);
+    linear-gradient(to bottom, rgba(34, 26, 18, 0.6) 0%, rgba(34, 26, 18, 0.25) 22%, rgba(34, 26, 18, 0.18) 45%, rgba(34, 26, 18, 0.62) 68%, rgba(34, 26, 18, 0.96) 100%);
 }
 
 .hero-inner {
@@ -186,10 +186,12 @@ a:hover { color: var(--cream); }
 }
 
 .hero-kicker {
-  margin: 0 0 1.1rem;
+  margin: 0 0 1.4rem;
   font-size: 1rem;
+  font-weight: 700;
   color: var(--gold);
   letter-spacing: 0.02em;
+  text-shadow: 0 1px 18px rgba(34, 26, 18, 0.6);
 }
 
 .hero-title {
@@ -205,8 +207,9 @@ a:hover { color: var(--cream); }
 .hero-line > span { display: inline-block; }
 .hero-line:nth-child(2) > span {
   font-style: italic;
-  font-weight: 400;
-  color: var(--tan);
+  font-weight: 420;
+  color: var(--cream);
+  text-shadow: 0 2px 26px rgba(34, 26, 18, 0.55);
 }
 
 .hero-sub {
@@ -234,7 +237,7 @@ a:hover { color: var(--cream); }
 }
 .btn-solid { background: var(--gold); color: var(--bark-deep); }
 .btn-solid:hover { background: var(--cream); color: var(--bark-deep); transform: translateY(-2px); }
-.btn-ghost { border: 1px solid var(--hairline); color: var(--cream); }
+.btn-ghost { border: 1px solid rgba(243, 234, 218, 0.55); color: var(--cream); }
 .btn-ghost:hover { border-color: var(--cream); transform: translateY(-2px); }
 
 /* ---------- shared section chrome ---------- */
@@ -545,16 +548,19 @@ section { padding-block: clamp(4rem, 9vw, 7rem); }
   }
   .ticker:hover .ticker-track { animation-play-state: paused; }
 
-  .js .reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 0.75s ease var(--d, 0s),
-      transform 0.75s var(--ease-out) var(--d, 0s);
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in 0.85s var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--di, 0) * 6%) cover 30%;
+    }
   }
-  .js .reveal.in { opacity: 1; transform: none; }
 }
 
+@keyframes reveal-in {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
 @keyframes hero-settle {
   from { transform: scale(1.09); }
   to { transform: scale(1); }
@@ -574,7 +580,6 @@ section { padding-block: clamp(4rem, 9vw, 7rem); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .reveal { opacity: 1; transform: none; }
   .hero-photo, .hero-line > span, .hero-kicker, .hero-sub, .hero-actions { animation: none; }
   .ticker-track { animation: none; flex-wrap: wrap; width: auto; }
   .ticker { overflow: visible; }
@@ -589,7 +594,16 @@ section { padding-block: clamp(4rem, 9vw, 7rem); }
 }
 
 @media (max-width: 720px) {
-  .site-nav { display: none; }
+  .site-head { flex-wrap: wrap; row-gap: 0.1rem; padding-top: 0.7rem; padding-bottom: 0.55rem; }
+  .site-nav {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+    gap: 1.1rem;
+    padding-bottom: 0.15rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .site-nav a { font-size: 0.92rem; padding-block: 0.35rem; }
   .visit-grid { grid-template-columns: 1fr; }
   .visit-grid .store + .store { border-top: 1px solid rgba(42, 32, 24, 0.18); padding-top: 2rem; }
 }
