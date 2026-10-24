@@ -381,9 +381,9 @@ def location_page(key, depth=2):
     <p class="loc-line">{esc(L['street'])} {esc(L['unit'])}<br>{esc(L['city'])}, NJ {esc(L['zip'])}</p>
     <p class="loc-line" style="margin-top:10px">Phone: <a href="tel:+1{PHONE.replace('-','')}" style="text-decoration:underline">{esc(PHONE)}</a><br>
     Email: <a href="mailto:{EMAIL}" style="text-decoration:underline">{esc(EMAIL)}</a></p>
-    <h3 style="margin:20px 0 0">Hours <span data-hours='{esc(L["hours_json"])}'></span></h3>
+    <div data-hours='{esc(L["hours_json"])}'><h3 style="margin:20px 0 0">Hours</h3>
     <table class="hours-table">{rows}</table>
-    <p style="font-size:.85rem;color:#7a6f60;margin-top:10px">{esc(L['hours_note'])}</p>
+    <p style="font-size:.85rem;color:#7a6f60;margin-top:10px">{esc(L['hours_note'])}</p></div>
     <div class="get-cta" style="margin-top:18px">
       <a class="btn btn-dark" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={U.quote(L['map_q'])}">Get directions</a>
       <a class="btn btn-ghost" style="color:var(--bark);border-color:rgba(42,32,24,.4)" href="tel:+1{PHONE.replace('-','')}">Call the shop</a>

@@ -85,8 +85,9 @@
       badge.textContent = open ? 'Open now' : (nextTxt || 'Closed today');
       var host = el.getAttribute('data-badge-host');
       if (host) {
-        var t = document.querySelector(host);
-        if (t) t.appendChild(badge);
+        var t = el.matches(host) ? el : el.querySelector(host);
+        if (!t && el.parentElement) t = el.parentElement.querySelector(host);
+        if (t) t.appendChild(badge); else el.appendChild(badge);
       } else {
         el.appendChild(badge);
       }
