@@ -672,7 +672,7 @@ def main():
     for cat, name, _ in CATS:
         write(f'shop/{cat}.html', cat_page(cat, depth=1))
     write('shop/all-items.html', all_items_page(depth=1))
-    write('cart.html', cart_page(depth=1))
+    write('cart.html', cart_page(depth=0))
     for p in M.values():
         write(f"products/{p['slug']}/index.html", product_page(p, depth=2))
     write('locations/index.html', locations_index(depth=1))
