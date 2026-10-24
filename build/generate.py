@@ -539,7 +539,7 @@ def index_page():
     <img class="reveal" src="{prefix}images/hero.png" alt="Rustic Earth's counter" loading="lazy">
   </div>
 </section>
-''' + footer(prefix)
+'''.replace(' loading="lazy"', '') + footer(prefix)
 
 # ---------- write everything ----------
 def write(path, content):
