@@ -179,7 +179,7 @@ def price_html(price):
     if not price: return ''
     parts = [q.strip() for q in price.replace('$','').split('-')]
     if len(parts) == 2:
-        return f'<span class="price">$ {esc(parts[0].strip())} &ndash; {esc(parts[1].strip())}</span>'
+        return f'<span class="price">${esc(parts[0].strip())} &ndash; ${esc(parts[1].strip())}</span>'
     return f'<span class="price">{esc(price)}</span>'
 
 def stock_badge(stock):
