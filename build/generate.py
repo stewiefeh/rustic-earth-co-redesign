@@ -5,6 +5,51 @@ import json, os, re, html as H, urllib.parse as U
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 M = json.load(open('/tmp/merged.json'))
+
+import re as _re
+_LABS = ['Antioxidant level', 'Antioxidants', 'Antioxidant', 'Caffeine',
+         'Suggested Use', 'Ingredients', 'Allergen Alert', 'Natural/Raw',
+         'Nutritional Facts', 'Steeping', 'Brewing']
+def _clean_desc(s):
+    if not s: return s
+    s = s.replace('****', ' ')
+    s = _re.sub(r'\s+', ' ', s).strip()
+    # space after a sentence mark glued to a capital
+    s = _re.sub(r'([.!?])(?=[A-Z])', r'\1 ', s)
+    # separator before glued attribute labels
+    for lab in _LABS:
+        s = _re.sub(r'(?<=[\w\)\.\!\?"\'])\s*(' + _re.escape(lab) + r')\b', r' · \1', s)
+    # paren-to-capital glue, colon glue
+    s = _re.sub(r'\)([A-Z])', ') · \\1', s)
+    s = _re.sub(r'(?<=[a-z0-9]):(?=[A-Z])', ': ', s)
+    if 'Balsamics:' in s:  # gift-box flavor lists run together
+        s = _re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', s)
+    s = _re.sub(r'\s+', ' ', s).strip()
+    # trim cuts that end mid-thought
+    if _re.search(r'[.!?]["\')]?\s*$', s): return s
+    if _re.search(r'[A-Za-z][^:]{0,30}: [\w /&+,.\'-]+$', s): return s
+    def _bal(t):
+        while t.count('(') > t.count(')'):
+            k = t.rfind('(')
+            t = t[:k].rstrip(' \u00b7,;:')
+        return t
+    j = s.rfind(' ')
+    ms = list(_re.finditer(r'[.!?]["\')]?(?=\s|$)', s))
+    if ms:
+        m = ms[-1]
+        tail = s[m.end():]
+        if m.start() > len(s) * 0.35 and tail.count(',') < 3:
+            return _bal(s[:m.end()].rstrip())
+    i = s.rfind(',')
+    if i > len(s) * 0.75: return _bal(s[:i].rstrip(' ,;:'))
+    if j > len(s) * 0.75: return _bal(s[:j].rstrip(' ,;:'))
+    if ms:
+        m = ms[-1]
+        if m.start() > len(s) * 0.3: return _bal(s[:m.end()].rstrip())
+    return _bal(s[:j].rstrip(' ,;:')) if j > 0 else s
+for _k in M:
+    M[_k]['desc'] = _clean_desc(M[_k].get('desc'))
+
 BY_SLUG = {p['slug']: p for p in M.values()}
 
 def esc(s): return H.escape(str(s or ''), quote=True)
