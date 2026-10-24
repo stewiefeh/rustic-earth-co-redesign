@@ -272,6 +272,7 @@
   }
 
   function init() {
+    document.documentElement.classList.remove('no-js');
     sync();
     initProduct();
     initCartPage();

@@ -226,8 +226,8 @@ def footer(prefix):
     <span>Site concept by Stephen Fehon.</span>
   </div>
 </footer>
-<script src="{prefix}js/main.js" defer></script>
-<script src="{prefix}js/cart.js" defer></script>
+<script src="{prefix}js/main.js?v=2" defer></script>
+<script src="{prefix}js/cart.js?v=2" defer></script>
 </body>
 </html>
 '''

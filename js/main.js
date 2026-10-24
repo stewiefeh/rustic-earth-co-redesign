@@ -2,6 +2,7 @@
 (function () {
   var html = document.documentElement;
   html.classList.add('js');
+  html.classList.remove('no-js');
 
   /* header state */
   var head = document.getElementById('siteHead');
