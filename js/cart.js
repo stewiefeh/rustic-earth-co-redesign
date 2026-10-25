@@ -24,6 +24,8 @@
   }
   function money(n) { return '$' + n.toFixed(2); }
 
+  window.RE_CART = { add: add, load: load, save: save };
+
   /* ---------- header badge ---------- */
   function sync() {
     var n = count();
@@ -244,6 +246,7 @@
       return (k + 1) + '. ' + i.qty + ' x ' + i.name + (i.variant ? ' (' + i.variant + ')' : '') +
         (i.sku ? ' [sku ' + i.sku + ']' : '') + ' - ' + money(i.price * i.qty);
     });
+    var acct = window.RE_ACCT && window.RE_ACCT.user ? window.RE_ACCT.user() : null;
     var body =
       'Hello Rustic Earth,\n\n' +
       'I would like to place this order from your website:\n\n' +
@@ -252,9 +255,11 @@
       (subtotal(c) >= FREE ? 'Qualifies for free shipping (over $75).\n' : '') + '\n' +
       (name ? 'Name: ' + name + '\n' : '') +
       (contact ? 'Phone or email: ' + contact + '\n' : '') +
+      (acct ? 'Account phone: ' + acct.phone + '\n' : '') +
       '\nPlease reply to confirm stock and arrange payment and pickup or shipping.\n\nThank you!';
     var subject = 'Web order' + (name ? ' from ' + name : '') + ' - ' + money(subtotal(c));
     var href = 'mailto:' + SHOP.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    if (acct && window.RE_ACCT.recordOrder) window.RE_ACCT.recordOrder(c, subtotal(c));
     window.location.href = href;
   }
 
