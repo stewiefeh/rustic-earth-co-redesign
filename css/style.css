@@ -332,12 +332,12 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .foot-brand .wordmark{font-size:1.1rem}
 .site-foot .fineprint{margin-top:36px;padding-top:18px;border-top:1px solid rgba(243,234,218,.14);font-size:.8rem;color:#8d8172;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
-/* ---------- scroll reveals (progressive) ---------- */
-.js .reveal{opacity:0;transform:translateY(30px)}
-.js .reveal.reveal-s{transform:translateY(30px) scale(.955)}
-.js .reveal.reveal-l{transform:translateX(-36px)}
-.js .reveal.reveal-r{transform:translateX(36px)}
-/* reveal fallback styling lives in the v5 motion block at the end of this file */
+/* ---------- scroll reveals (progressive) ----------
+   No ungated pre-hide here: on browsers running the scroll-driven
+   v5 reveals, a cascade opacity:0 would win again after each element
+   finishes its entry range (fill:backwards holds nothing forward),
+   erasing content. The fallback pre-hide lives only in the v5 motion
+   block, gated to html.js:not(.v5css). */
 .no-js .reveal{opacity:1;transform:none}
 
 [hidden]{display:none !important}
