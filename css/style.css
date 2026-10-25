@@ -112,7 +112,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
   display:inline-flex;align-items:center;gap:.55em;
   font-weight:700;font-size:.95rem;letter-spacing:.02em;
   padding:.85em 1.6em;border-radius:999px;cursor:pointer;border:0;
-  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .25s,color .25s;
+  transition:transform .25s var(--m-spring),box-shadow .25s,background .25s,color .25s;
 }
 .btn-primary{background:var(--turmeric);color:var(--bark-deep)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(217,154,51,.35)}
@@ -150,7 +150,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .cat-card{
   position:relative;border-radius:var(--radius);overflow:hidden;
   aspect-ratio:4/3;background:var(--bark);display:block;
-  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;
+  transition:transform .35s var(--m-in),box-shadow .35s;
 }
 .cat-card img{width:100%;height:100%;object-fit:cover;opacity:.88;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .3s}
 .cat-card::after{
@@ -170,11 +170,11 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .p-card{
   display:block;background:#fff;border-radius:var(--radius);overflow:hidden;
   border:1px solid rgba(42,32,24,.08);
-  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;
+  transition:transform .3s var(--m-in),box-shadow .3s;
 }
 .p-card:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(34,26,18,.16)}
 .p-thumb{display:block;position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--linen)}
-.p-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+.p-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .55s var(--m-soft)}
 .p-card:hover .p-thumb img{transform:scale(1.07)}
 .p-thumb .stock{
   position:absolute;top:10px;left:10px;z-index:2;
@@ -337,23 +337,11 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .js .reveal.reveal-s{transform:translateY(30px) scale(.955)}
 .js .reveal.reveal-l{transform:translateX(-36px)}
 .js .reveal.reveal-r{transform:translateX(36px)}
-.js .reveal,.js .reveal.reveal-s,.js .reveal.reveal-l,.js .reveal.reveal-r{
-  transition:opacity .8s var(--eoq) calc(var(--di,0)*80ms),transform .8s var(--eoq) calc(var(--di,0)*80ms)}
-.js .reveal.done{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){
-  .js .reveal{opacity:1 !important;transform:none !important;animation:none !important}
-  .ticker-track{animation:none}
-  html{scroll-behavior:auto}
-}
-.no-js .reveal,.reveal.done{opacity:1;transform:none}
+/* reveal fallback styling lives in the v5 motion block at the end of this file */
+.no-js .reveal{opacity:1;transform:none}
 
 [hidden]{display:none !important}
 
-/* ---------- page fade ---------- */
-@media(prefers-reduced-motion:no-preference){
-  .pagein{animation:pagein .5s ease both}
-}
-@keyframes pagein{from{opacity:0}to{opacity:1}}
 
 /* ---------- cart & purchase ---------- */
 .no-js .no-js-hide{display:none}
@@ -471,98 +459,156 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .p-thumb.nophoto{padding:0}
 .pd-media .cat-art{border-radius:inherit;overflow:hidden}
 
-/* ----- motion polish (concept by Stephen Fehon) ----- */
-@media (prefers-reduced-motion: no-preference){
-  @view-transition{navigation:auto}
-  html{scroll-behavior:smooth}
-  .hero img.hero-img{animation:kenburns 18s ease-in-out infinite alternate}
-  @keyframes kenburns{from{transform:scale(1.06)}to{transform:scale(1.13)}}
-  .hero-copy>*{opacity:0;animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
-  .hero-copy>*:nth-child(1){animation-delay:.05s}
-  .hero-copy>*:nth-child(2){animation-delay:.14s}
-  .hero-copy>*:nth-child(3){animation-delay:.23s}
-  .hero-copy>*:nth-child(4){animation-delay:.32s}
-  @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
-  .reveal{transition-delay:var(--d,0ms)}
-  .js .p-thumb img,.js .pd-media img{opacity:0;transition:opacity .5s ease}
-  .js .p-thumb img.ld,.js .pd-media img.ld{opacity:1}
-  .nav-row a{position:relative}
-  .nav-row a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--turmeric);transform:scaleX(0);transform-origin:center;transition:transform .25s ease}
-  .nav-row a:hover::after{transform:scaleX(1)}
-  .p-card{transition:transform .35s ease,box-shadow .35s ease}
-  .p-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(20,14,8,.12)}
-  .btn-primary{position:relative;overflow:hidden}
-  .btn-primary::after{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);transition:left .55s ease}
-  .btn-primary:hover::after{left:115%}
-  .cart-count.pop{animation:badgepop .45s cubic-bezier(.2,.8,.3,1.4)}
-  @keyframes badgepop{0%{transform:scale(1)}40%{transform:scale(1.4)}100%{transform:scale(1)}}
-  .fly{position:fixed;width:56px;height:56px;border-radius:14px;overflow:hidden;z-index:999;pointer-events:none;box-shadow:0 10px 24px rgba(20,14,8,.3);transition:transform .6s cubic-bezier(.2,.7,.3,1),opacity .6s ease}
-  .fly img{width:100%;height:100%;object-fit:cover}
-}
-
-/* ----- motion pass two (concept by Stephen Fehon) ----- */
-@media (prefers-reduced-motion: no-preference){
-  .p-card .name{background:linear-gradient(currentColor,currentColor) no-repeat 0 100%/0% 2px;transition:background-size .35s ease}
-  .p-card:hover .name{background-size:100% 2px}
-  .js .pd-media img{transform:scale(1.04);transition:opacity .6s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
-  .js .pd-media img.ld{transform:scale(1)}
-  .btn-primary{transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s ease}
-  .added-pulse{animation:ring .65s ease-out}
-  @keyframes ring{0%{box-shadow:0 0 0 0 rgba(217,154,51,.5)}100%{box-shadow:0 0 0 18px rgba(217,154,51,0)}}
-  .ribbon{overflow:hidden;background:#EDE0CB;border-block:1px solid rgba(42,32,24,.14)}
-  .ribbon-track{display:flex;align-items:center;width:max-content;animation:ribbonslide 30s linear infinite}
-  .ribbon:hover .ribbon-track{animation-play-state:paused}
-  .ribbon-track svg{width:14px;height:14px;flex:none;margin:0 14px}
-  .ribbon-track em{font-family:Fraunces,serif;font-style:italic;font-size:1.05rem;color:var(--bark);white-space:nowrap}
-  @keyframes ribbonslide{to{transform:translateX(-50%)}}
-  header{transition:box-shadow .35s ease}
-  header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
-}
 
 
-/* ----- motion system v3 (concept by Stephen Fehon) ----- */
-:root{--ease:cubic-bezier(.22,.61,.21,1);--spring:cubic-bezier(.34,1.35,.5,1)}
-.p-info .price{display:block}
-#scrollBar{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--paprika);transform:scaleX(0);transform-origin:0 50%;z-index:80;pointer-events:none}
-header{transition:transform .4s var(--ease),box-shadow .35s ease}
-header.hid{transform:translateY(-110%)}
-:focus-visible{outline:2px solid var(--paprika);outline-offset:2px}
-@media(prefers-reduced-motion:reduce){#scrollBar{display:none}header{transition:none}}
-@media(prefers-reduced-motion:no-preference){
-  .btn:active{transform:scale(.97)}
-  ::selection{background:var(--turmeric);color:var(--bark-deep)}
-  .p-card .price{transition:transform .35s var(--ease)}
-  .p-card:hover .price{transform:translateX(4px)}
-}
+/* ===== motion system v5 — "set by hand" (concept by Stephen Fehon) =====
+   One language across the whole site: things arrive like they were set
+   down on a shelf. Reveals settle in under ~550ms with a slight
+   overshoot, travel stays under 20px, and every scroll effect runs on
+   the compositor so scrolling never janks.
+   Reveals are per-element scroll-driven animations (animation-timeline:
+   view()) where the browser supports them: each element animates as it
+   enters the viewport, so grids stagger themselves by scroll position
+   with no JavaScript. The fill mode is backwards and keyframes only
+   define the from-state, so the finished state is the element's own:
+   hover transforms keep working after a card lands, and content is
+   never hidden where the timeline is unsupported. Older browsers get
+   the IntersectionObserver fallback in main.js. Reduced-motion users
+   get the finished page instantly. */
 
-
-/* ===== motion system v4 (concept by Stephen Fehon) ===== */
 :root{
-  --eo:cubic-bezier(.16,.84,.28,.99);
-  --eoq:cubic-bezier(.2,.7,.25,1);
-  --spring:cubic-bezier(.34,1.4,.5,1);
-  --d1:.18s;--d2:.4s;--d3:.8s;
+  --m-in:cubic-bezier(.2,.75,.25,1.05);
+  --m-soft:cubic-bezier(.3,.6,.2,1);
+  --m-spring:cubic-bezier(.3,1.35,.45,1);
+  --m-fast:.14s;--m-med:.32s;--m-slow:.55s;
 }
-/* scroll-linked, compositor-driven where supported: progress bar + hero depth */
+
+/* --- page chrome --- */
+:focus-visible{outline:2px solid var(--paprika);outline-offset:2px}
+::selection{background:var(--turmeric);color:var(--bark-deep)}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+/* --- scroll progress --- */
+#scrollBar{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--paprika);transform:scaleX(0);transform-origin:0 50%;z-index:80;pointer-events:none}
 @supports (animation-timeline:scroll()){
-  #scrollBar{animation:barfill linear both;animation-timeline:scroll(root);animation-duration:1ms}
-  .hero .hero-copy{animation:copydrift linear both;animation-timeline:scroll(root);animation-range:0 95vh;animation-duration:1ms}
+  @media(prefers-reduced-motion:no-preference){
+    #scrollBar{animation:barfill linear both;animation-timeline:scroll(root);animation-duration:1ms}
+  }
 }
 @keyframes barfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-@keyframes copydrift{to{transform:translateY(13%);opacity:.35}}
-/* drawer + backdrop get spring easing */
-.drawer{transition:transform .45s var(--spring)}
-.drawer-backdrop{transition:opacity .35s ease}
-/* control feedback: chips, quantities, inputs, footer links */
-.chip:active{transform:scale(.94)}
-.qty-btn{transition:background .15s,transform .12s var(--eo)}
-.qty-btn:active{transform:scale(.9)}
-.site-foot form input{transition:border-color .25s,box-shadow .25s var(--eo)}
+
+/* --- smart header --- */
+header{transition:transform .4s var(--m-soft),box-shadow .35s ease}
+header.hid{transform:translateY(-110%)}
+header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
+
+/* --- hero: entrance on load, depth on scroll --- */
+@media(prefers-reduced-motion:no-preference){
+  .hero img.hero-img{animation:kenburns 26s ease-in-out infinite alternate}
+  @keyframes kenburns{from{transform:scale(1.06)}to{transform:scale(1.12)}}
+  .hero-copy>*{animation:rise .6s var(--m-in) both}
+  .hero-copy>*:nth-child(1){animation-delay:.06s}
+  .hero-copy>*:nth-child(2){animation-delay:.15s}
+  .hero-copy>*:nth-child(3){animation-delay:.24s}
+  .hero-copy>*:nth-child(4){animation-delay:.33s}
+  @keyframes rise{from{opacity:0;transform:translateY(20px)}}
+  @supports (animation-timeline:scroll()){
+    .hero .hero-copy{animation:copydrift linear both;animation-timeline:scroll(root);animation-range:0 90vh;animation-duration:1ms}
+  }
+  @keyframes copydrift{to{transform:translateY(12%);opacity:.35}}
+}
+
+/* --- reveals, modern browsers: scroll-driven, per element --- */
+@supports (animation-timeline:view()){
+  @media(prefers-reduced-motion:no-preference){
+    .reveal{animation:rv-up var(--m-slow) var(--m-in) backwards;animation-timeline:view();animation-range:entry 0% entry 55%}
+    .reveal.reveal-s{animation-name:rv-scale}
+    .reveal.reveal-l{animation-name:rv-left}
+    .reveal.reveal-r{animation-name:rv-right}
+  }
+}
+@keyframes rv-up{from{opacity:0;transform:translateY(18px)}}
+@keyframes rv-scale{from{opacity:0;transform:scale(.965)}}
+@keyframes rv-left{from{opacity:0;transform:translateX(-22px)}}
+@keyframes rv-right{from{opacity:0;transform:translateX(22px)}}
+
+/* --- reveals, older browsers: the observer adds .done, then .settled
+       once the settle has run so hover transitions take back over --- */
+@media(prefers-reduced-motion:no-preference){
+  html.js:not(.v5css) .reveal{opacity:0;transform:translateY(18px);transition:opacity var(--m-slow) var(--m-soft) calc(var(--di,0)*70ms),transform var(--m-slow) var(--m-soft) calc(var(--di,0)*70ms)}
+  html.js:not(.v5css) .reveal.reveal-s{transform:scale(.965)}
+  html.js:not(.v5css) .reveal.reveal-l{transform:translateX(-22px)}
+  html.js:not(.v5css) .reveal.reveal-r{transform:translateX(22px)}
+  html.js:not(.v5css) .reveal.done{opacity:1;transform:none;transition-delay:0ms}
+  html.js:not(.v5css) .reveal.settled{transition:none}
+}
+
+/* --- photos: pop once loaded, no flash --- */
+.js .p-thumb img,.js .pd-media img{opacity:0;transition:opacity .5s ease}
+.js .p-thumb img.ld,.js .pd-media img.ld{opacity:1}
+@media(prefers-reduced-motion:no-preference){
+  .js .pd-media img{transform:scale(1.035);transition:opacity .6s ease,transform .9s var(--m-soft)}
+  .js .pd-media img.ld{transform:none}
+}
+
+/* --- hover language --- */
+@media(prefers-reduced-motion:no-preference){
+  .nav-row a{position:relative}
+  .nav-row a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--turmeric);transform:scaleX(0);transform-origin:center;transition:transform .25s var(--m-soft)}
+  .nav-row a:hover::after,.nav-row a[aria-current]::after{transform:scaleX(1)}
+  .p-card .name{background:linear-gradient(currentColor,currentColor) no-repeat 0 100%/0% 2px;transition:background-size .35s var(--m-soft)}
+  .p-card:hover .name{background-size:100% 2px}
+  .p-card .price{transition:transform var(--m-med) var(--m-soft)}
+  .p-card:hover .price{transform:translateX(4px)}
+  .btn-primary{position:relative;overflow:hidden}
+  .btn-primary::after{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);transition:left .55s var(--m-soft)}
+  .btn-primary:hover::after{left:115%}
+  .cat-card:hover .cat-label{transform:translateY(-3px)}
+  .loc-card:hover .cat-label{transform:translateY(-4px)}
+}
+
+/* --- press and control feedback --- */
+.btn:active{transform:scale(.97)}
+.chip{transition:border-color var(--m-fast) var(--m-soft),background-color var(--m-fast) var(--m-soft),color var(--m-fast) var(--m-soft),transform var(--m-fast) var(--m-spring)}
+.chip:active{transform:scale(.93)}
+.qty-btn{transition:background var(--m-fast),transform .12s var(--m-spring)}
+.qty-btn:active{transform:scale(.88)}
+.site-foot form input{transition:border-color var(--m-med),box-shadow var(--m-med) var(--m-soft)}
 .site-foot form input:focus{border-color:var(--turmeric);box-shadow:0 0 0 3px rgba(217,154,51,.22)}
-.site-foot a{transition:color .2s,padding-left .25s var(--eo)}
+.site-foot a{transition:color .2s,padding-left .25s var(--m-soft)}
 .site-foot a:hover{padding-left:6px}
-/* location + category cards mirror the product-card hover language */
-.loc-card .cat-label{transition:transform .4s var(--eo)}
-.loc-card:hover .cat-label{transform:translateY(-4px)}
-.cat-card .cat-label .count{display:block;transition:transform .4s var(--eo)}
-.cat-card:hover .cat-label{transform:translateY(-3px)}
+
+/* --- cart: drawer spring, badge pop, fly-to-cart --- */
+.drawer{transition:transform .45s var(--m-spring)}
+.drawer-backdrop{transition:opacity .35s ease}
+.cart-count.pop{animation:badgepop .45s var(--m-spring)}
+@keyframes badgepop{0%{transform:scale(1)}40%{transform:scale(1.4)}100%{transform:scale(1)}}
+.added-pulse{animation:ring .65s ease-out}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(217,154,51,.5)}100%{box-shadow:0 0 0 18px rgba(217,154,51,0)}}
+.fly{position:fixed;width:56px;height:56px;border-radius:14px;overflow:hidden;z-index:999;pointer-events:none;box-shadow:0 10px 24px rgba(20,14,8,.3);transition:transform .6s cubic-bezier(.2,.7,.3,1),opacity .6s ease}
+.fly img{width:100%;height:100%;object-fit:cover}
+
+/* --- marquees: the ingredient ribbon under the hero --- */
+.ribbon{overflow:hidden;background:#EDE0CB;border-block:1px solid rgba(42,32,24,.14)}
+.ribbon-track{display:flex;align-items:center;width:max-content;animation:ribbonslide 30s linear infinite}
+.ribbon:hover .ribbon-track{animation-play-state:paused}
+.ribbon-track svg{width:14px;height:14px;flex:none;margin:0 14px}
+.ribbon-track em{font-family:Fraunces,serif;font-style:italic;font-size:1.05rem;color:var(--bark);white-space:nowrap}
+@keyframes ribbonslide{to{transform:translateX(-50%)}}
+
+/* --- cross-page: crossfade between pages where supported --- */
+@media(prefers-reduced-motion:no-preference){
+  @view-transition{navigation:auto}
+}
+
+/* --- reduced motion: the finished page, instantly --- */
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1 !important;transform:none !important;animation:none !important;transition:none !important}
+  .hero-copy,.hero-copy>*{animation:none !important}
+  .hero img.hero-img,.ticker-track,.ribbon-track{animation:none !important}
+  #scrollBar{display:none}
+  header{transition:none}
+  .drawer,.drawer-backdrop,.ship-bar{transition:none}
+  .fly{display:none}
+  .js .p-thumb img,.js .pd-media img{opacity:1;transform:none;transition:none}
+}

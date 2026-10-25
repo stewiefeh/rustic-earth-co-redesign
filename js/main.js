@@ -25,9 +25,17 @@
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  /* scroll reveals: IO-driven, grouped stagger via --di */
+  /* scroll reveals: modern browsers run them as per-element CSS
+     scroll-driven animations (no JS); elsewhere an IO pass does it.
+     .settled drops the fallback transition once the settle has run so
+     hover transitions take back over */
+  var v5css = false;
+  try { v5css = window.CSS && CSS.supports('animation-timeline', 'view()'); } catch (e) {}
+  if (v5css) html.classList.add('v5css');
   var reveals = [].slice.call(document.querySelectorAll('.reveal'));
-  if (reveals.length && 'IntersectionObserver' in window) {
+  if (v5css) {
+    /* CSS view() timelines drive the reveals; nothing to observe */
+  } else if (reveals.length && 'IntersectionObserver' in window) {
     var seen = new Map();
     reveals.forEach(function (el) {
       var p = el.parentElement, n = seen.get(p) || 0;
@@ -38,13 +46,15 @@
       entries.forEach(function (en) {
         if (en.isIntersecting) {
           en.target.classList.add('done');
+          var di = parseFloat(en.target.style.getPropertyValue('--di')) || 0;
+          setTimeout(function () { en.target.classList.add('settled'); }, 750 + di * 70);
           io.unobserve(en.target);
         }
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
     reveals.forEach(function (el) { io.observe(el); });
   } else {
-    reveals.forEach(function (el) { el.classList.add('done'); });
+    reveals.forEach(function (el) { el.classList.add('done', 'settled'); });
   }
 
   /* category sub-filter chips */
@@ -56,11 +66,20 @@
       chip.addEventListener('click', function () {
         chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
         var sub = chip.getAttribute('data-sub');
-        var shown = 0;
+        var shown = 0, si = 0;
+        var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         cards.forEach(function (card) {
           var show = sub === 'all' || card.getAttribute('data-subcat') === sub;
           card.style.display = show ? '' : 'none';
-          if (show) shown++;
+          if (show) {
+            if (!calm && card.animate) {
+              card.animate(
+                [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }],
+                { duration: 420, delay: Math.min(si, 8) * 45, easing: 'cubic-bezier(.2,.75,.25,1.05)', fill: 'backwards' }
+              );
+            }
+            si++; shown++;
+          }
         });
         if (count) count.textContent = shown + ' item' + (shown === 1 ? '' : 's');
       });
