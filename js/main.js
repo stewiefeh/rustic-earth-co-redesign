@@ -145,7 +145,7 @@
 /* motion polish - stagger reveals and fade product images in (concept by Stephen Fehon) */
 (function () {
   var run = function () {
-    document.querySelectorAll('.p-thumb img, .pd-media img').forEach(function (im) {
+    document.querySelectorAll('.p-thumb img, .pd-photo img').forEach(function (im) {
       if (im.complete && im.naturalWidth > 0) { im.classList.add('ld'); return; }
       im.addEventListener('load', function () { im.classList.add('ld'); });
       im.addEventListener('error', function () { im.classList.add('ld'); });

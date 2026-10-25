@@ -457,7 +457,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .cat-art{display:block;width:100%;height:100%}
 .cat-art svg{display:block;width:100%;height:100%}
 .p-thumb.nophoto{padding:0}
-.pd-media .cat-art{border-radius:inherit;overflow:hidden}
+.pd-photo .cat-art{border-radius:inherit;overflow:hidden}
 
 
 
@@ -544,11 +544,11 @@ header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
 }
 
 /* --- photos: pop once loaded, no flash --- */
-.js .p-thumb img,.js .pd-media img{opacity:0;transition:opacity .5s ease}
-.js .p-thumb img.ld,.js .pd-media img.ld{opacity:1}
+.js .p-thumb img,.js .pd-photo img{opacity:0;transition:opacity .5s ease}
+.js .p-thumb img.ld,.js .pd-photo img.ld{opacity:1}
 @media(prefers-reduced-motion:no-preference){
-  .js .pd-media img{transform:scale(1.035);transition:opacity .6s ease,transform .9s var(--m-soft)}
-  .js .pd-media img.ld{transform:none}
+  .js .pd-photo img{transform:scale(1.035);transition:opacity .6s ease,transform .9s var(--m-soft)}
+  .js .pd-photo img.ld{transform:none}
 }
 
 /* --- hover language --- */
@@ -610,7 +610,7 @@ header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
   header{transition:none}
   .drawer,.drawer-backdrop,.ship-bar{transition:none}
   .fly{display:none}
-  .js .p-thumb img,.js .pd-media img{opacity:1;transform:none;transition:none}
+  .js .p-thumb img,.js .pd-photo img{opacity:1;transform:none;transition:none}
 }
 
 /* v5.1 failsafe: force a stalled reveal visible (see main.js) */

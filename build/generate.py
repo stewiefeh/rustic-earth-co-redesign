@@ -181,7 +181,7 @@ def head(title, desc, prefix, extra=''):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,640&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{prefix}css/style.css?v=10">
+<link rel="stylesheet" href="{prefix}css/style.css?v=11">
 {extra}</head>
 <body data-root="{prefix}">
 '''
@@ -259,7 +259,7 @@ def footer(prefix):
     <span>Site concept by Stephen Fehon.</span>
   </div>
 </footer>
-<script src="{prefix}js/main.js?v=7" defer></script>
+<script src="{prefix}js/main.js?v=8" defer></script>
 <script src="{prefix}js/square-links.js?v=1" defer></script>
 <script src="{prefix}js/cart.js?v=4" defer></script>
 </body>
@@ -336,10 +336,10 @@ def product_page(p, depth=2):
     cat_name = CAT_NAMES.get(p['cat'], 'Shop')
     cat_href = (prefix + 'shop/' + p['cat'] + '.html') if p['cat'] != 'shop-all' else (prefix + 'shop/all-items.html')
     ip = img_path(p, prefix)
-    art = art_html(p)
-    photo = (f'{art}' if ip
-             else tag_icon())
-    nophoto = '' if ip else ' nophoto'
+    has_img = p['slug'] in IMG_EXT
+    photo = (f'<img src="{ip}" alt="{esc(p["name"])}" loading="eager">' if has_img
+             else art_html(p))
+    nophoto = '' if has_img else ' nophoto'
     desc_paras = ''.join(f'<p>{esc(s.strip())}</p>' for s in re.split(r'\n+', p['desc'] or '') if s.strip())
     stock = (p['stock'] or '').strip()
     if not stock: scls, stxt = 'in', 'In stock'
