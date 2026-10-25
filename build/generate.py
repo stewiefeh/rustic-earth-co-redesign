@@ -4,7 +4,8 @@ import json, os, re, html as H, urllib.parse as U
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
-M = json.load(open('/tmp/merged.json'))
+_MP = ROOT + '/build/data/merged.json'
+M = json.load(open(_MP if os.path.exists(_MP) else '/tmp/merged.json'))
 
 import re as _re
 _LABS = ['Antioxidant level', 'Antioxidants', 'Antioxidant', 'Caffeine',
@@ -48,7 +49,8 @@ def _clean_desc(s):
         if m.start() > len(s) * 0.3: return _bal(s[:m.end()].rstrip())
     return _bal(s[:j].rstrip(' ,;:')) if j > 0 else s
 for _k in M:
-    M[_k]['desc'] = _clean_desc(M[_k].get('desc'))
+    if not M[_k].get('preclean'):
+        M[_k]['desc'] = _clean_desc(M[_k].get('desc'))
 
 BY_SLUG = {p['slug']: p for p in M.values()}
 SKUS = json.load(open(ROOT + '/build/data/skus.json'))
