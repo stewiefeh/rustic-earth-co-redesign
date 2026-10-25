@@ -715,3 +715,8 @@ html:not(.js) .acct-btn{display:none}
   .cat-card:last-child{grid-column:auto}
 }
 .hero h1{max-width:19ch}
+
+/* ----- v4b: payment badges balance 4 across 2 rows on small screens ----- */
+@media(max-width:479px){
+  .pay-row{display:grid;grid-template-columns:repeat(4,auto);justify-content:center;gap:8px}
+}
