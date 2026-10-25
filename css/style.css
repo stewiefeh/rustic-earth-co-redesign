@@ -703,3 +703,15 @@ html:not(.js) .acct-btn{display:none}
 .pay-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;max-width:1180px;margin:0 auto;padding:18px 0 4px}
 .pay-badge{width:40px;height:26px;border-radius:5px;background:#fff;overflow:hidden;display:inline-flex;flex:0 0 auto;box-shadow:0 1px 3px rgba(20,14,8,.4)}
 .pay-badge svg{width:40px;height:26px;display:block}
+
+/* ----- v4: balanced category grid, headline breaks at the comma ----- */
+.cat-grid{grid-template-columns:repeat(3,1fr)}
+@media(max-width:999px){
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .cat-card:last-child{grid-column:span 2}
+}
+@media(max-width:619px){
+  .cat-grid{grid-template-columns:1fr}
+  .cat-card:last-child{grid-column:auto}
+}
+.hero h1{max-width:19ch}
