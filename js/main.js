@@ -4,32 +4,45 @@
   html.classList.add('js');
   html.classList.remove('no-js');
 
-  /* header state */
+  /* header state + scroll progress */
   var head = document.getElementById('siteHead');
+  var bar = document.createElement('div');
+  bar.id = 'scrollBar'; document.body.appendChild(bar);
+  var lastY = window.scrollY;
   function onScroll() {
-    if (head) head.classList.toggle('scrolled', window.scrollY > 40);
+    var y = window.scrollY;
+    var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    bar.style.transform = 'scaleX(' + Math.min(1, y / max) + ')';
+    if (head) {
+      head.classList.toggle('scrolled', y > 40);
+      if (y > 160 && y > lastY + 2) head.classList.add('hid');
+      else if (y < lastY - 2 || y <= 160) head.classList.remove('hid');
+    }
+    lastY = y;
   }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  /* scroll reveals: CSS view-timeline where supported, IO fallback elsewhere */
+  /* scroll reveals: IO-driven, grouped stagger via --di */
   var reveals = [].slice.call(document.querySelectorAll('.reveal'));
-  if (reveals.length) {
-    var supported = false;
-    try { supported = CSS.supports('animation-timeline', 'view()'); } catch (e) {}
-    if (!supported && 'IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) {
-            en.target.classList.add('done');
-            io.unobserve(en.target);
-          }
-        });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-      reveals.forEach(function (el) { io.observe(el); });
-    } else if (!supported) {
-      reveals.forEach(function (el) { el.classList.add('done'); });
-    }
+  if (reveals.length && 'IntersectionObserver' in window) {
+    var seen = new Map();
+    reveals.forEach(function (el) {
+      var p = el.parentElement, n = seen.get(p) || 0;
+      seen.set(p, n + 1);
+      el.style.setProperty('--di', Math.min(n - 1, 6));
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('done');
+          io.unobserve(en.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    reveals.forEach(function (el) { io.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('done'); });
   }
 
   /* category sub-filter chips */
@@ -111,11 +124,6 @@
 /* motion polish - stagger reveals and fade product images in (concept by Stephen Fehon) */
 (function () {
   var run = function () {
-    var groups = new Map();
-    document.querySelectorAll('.reveal').forEach(function (el) {
-      var p = el.parentElement, n = groups.get(p) || 0; groups.set(p, n + 1);
-      el.style.setProperty('--d', Math.min(n, 7) * 70 + 'ms');
-    });
     document.querySelectorAll('.p-thumb img, .pd-media img').forEach(function (im) {
       if (im.complete && im.naturalWidth > 0) { im.classList.add('ld'); return; }
       im.addEventListener('load', function () { im.classList.add('ld'); });
@@ -141,11 +149,6 @@
       ribbon.className = 'ribbon'; ribbon.setAttribute('aria-hidden', 'true');
       ribbon.innerHTML = '<div class="ribbon-track">' + group + group + '</div>';
       hero.parentNode.insertBefore(ribbon, hero.nextSibling);
-    }
-    var head = document.querySelector('header');
-    if (head) {
-      var onScroll = function () { head.classList.toggle('scrolled', window.scrollY > 10); };
-      window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
     }
     if (fine && !calm) {
       document.querySelectorAll('.btn-primary').forEach(function (btn) {

@@ -172,7 +172,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
   transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;
 }
 .p-card:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(34,26,18,.16)}
-.p-thumb{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--linen)}
+.p-thumb{display:block;position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--linen)}
 .p-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
 .p-card:hover .p-thumb img{transform:scale(1.07)}
 .p-thumb .stock{
@@ -183,7 +183,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .stock.low{background:var(--caramel)}
 .stock.out{background:var(--paprika)}
 .stock{white-space:nowrap;line-height:1.2}
-.p-info{padding:14px 16px 16px}
+.p-info{display:block;padding:14px 16px 16px}
 .p-info .name{font-weight:700;font-size:.98rem;line-height:1.3;display:block;color:var(--ink)}
 .p-info .price{margin-top:5px;color:var(--paprika);font-weight:800;font-size:.95rem}
 
@@ -332,17 +332,8 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .site-foot .fineprint{margin-top:36px;padding-top:18px;border-top:1px solid rgba(243,234,218,.14);font-size:.8rem;color:#8d8172;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 /* ---------- scroll reveals (progressive) ---------- */
-.js .reveal{opacity:0;transform:translateY(26px)}
-@supports (animation-timeline:view()){
-  .js .reveal{
-    animation:rise .9s cubic-bezier(.2,.7,.2,1) both;
-    animation-timeline:view();
-    animation-range:entry calc(var(--di,0)*6%) cover 30%;
-  }
-  .js .reveal.done{opacity:1;transform:none}
-}
-@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-.js .reveal{animation-fill-mode:both}
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.22,.61,.21,1) calc(var(--di,0)*70ms),transform .7s cubic-bezier(.22,.61,.21,1) calc(var(--di,0)*70ms)}
+.js .reveal.done{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   .js .reveal{opacity:1 !important;transform:none !important;animation:none !important}
   .ticker-track{animation:none}
@@ -518,4 +509,20 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
   @keyframes ribbonslide{to{transform:translateX(-50%)}}
   header{transition:box-shadow .35s ease}
   header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
+}
+
+
+/* ----- motion system v3 (concept by Stephen Fehon) ----- */
+:root{--ease:cubic-bezier(.22,.61,.21,1);--spring:cubic-bezier(.34,1.35,.5,1)}
+.p-info .price{display:block}
+#scrollBar{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--paprika);transform:scaleX(0);transform-origin:0 50%;z-index:80;pointer-events:none}
+header{transition:transform .4s var(--ease),box-shadow .35s ease}
+header.hid{transform:translateY(-110%)}
+:focus-visible{outline:2px solid var(--paprika);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){#scrollBar{display:none}header{transition:none}}
+@media(prefers-reduced-motion:no-preference){
+  .btn:active{transform:scale(.97)}
+  ::selection{background:var(--turmeric);color:var(--bark-deep)}
+  .p-card .price{transition:transform .35s var(--ease)}
+  .p-card:hover .price{transform:translateX(4px)}
 }
