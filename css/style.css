@@ -701,8 +701,16 @@ html:not(.js) .acct-btn{display:none}
 
 /* ----- footer payment badges ----- */
 .pay-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;max-width:1180px;margin:0 auto;padding:18px 0 4px}
-.pay-badge{width:40px;height:26px;border-radius:5px;background:#fff;overflow:hidden;display:inline-flex;flex:0 0 auto;box-shadow:0 1px 3px rgba(20,14,8,.4)}
-.pay-badge svg{width:40px;height:26px;display:block}
+.pay-badge{width:46px;height:26px;border-radius:5px;background:#fff;overflow:hidden;display:inline-flex;flex:0 0 auto;box-shadow:0 1px 3px rgba(20,14,8,.4)}
+.pay-badge img{width:100%;height:100%;object-fit:contain;display:block;padding:3px 4px;box-sizing:border-box}
+.pay-badge--visa{width:50px}
+.pay-badge--mc{width:32px}
+.pay-badge--jcb{width:32px}
+.pay-badge--disc{width:104px}
+.pay-badge--sq{width:26px;background:none;box-shadow:none}
+.pay-badge--sq img{padding:0}
+.pay-badge--sqw{background:#fff;box-shadow:0 1px 3px rgba(20,14,8,.4)}
+.pay-badge--sqw img{padding:2px}
 
 /* ----- v4: balanced category grid, headline breaks at the comma ----- */
 .cat-grid{grid-template-columns:repeat(3,1fr)}
