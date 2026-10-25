@@ -69,6 +69,26 @@ pdir = 'images/products'
 if os.path.isdir(pdir):
     for f in os.listdir(pdir):
         IMG_EXT[os.path.splitext(f)[0]] = f
+# per-category line art for products without photos (concept by Stephen Fehon)
+_CAT_MOTIFS = {
+ 'tea': '<path d="M118 236h164a8 8 0 0 1-8 42H126a8 8 0 0 1-8-42Z" fill="none" stroke="#D99A33" stroke-width="7"/><path d="M282 250c26-4 44 6 40 22s-28 22-44 14" fill="none" stroke="#D99A33" stroke-width="7"/><path d="M170 200c-10-26 10-34 2-58m36 58c-10-26 10-34 2-58" fill="none" stroke="#A6472E" stroke-width="6" stroke-linecap="round"/><path d="M140 292c-6 22 4 34 20 40" fill="none" stroke="#D99A33" stroke-width="5" stroke-linecap="round"/>',
+ 'honey': '<path d="M200 128l34 20v40l-34 20-34-20v-40Z" fill="none" stroke="#D99A33" stroke-width="7"/><path d="M166 188l34 20 34-20m-68-40-34 20v40l34 20" fill="none" stroke="#D99A33" stroke-width="5"/><path d="M200 246v64m0-64 26-10m-26 10-26-10" fill="none" stroke="#A6472E" stroke-width="7" stroke-linecap="round"/><circle cx="200" cy="322" r="14" fill="none" stroke="#A6472E" stroke-width="6"/>',
+ 'vinegar': '<path d="M182 132h36v34l22 20v96a10 10 0 0 1-10 10h-60a10 10 0 0 1-10-10v-96l22-20Z" fill="none" stroke="#A6472E" stroke-width="7"/><path d="M170 250h60" stroke="#A6472E" stroke-width="6"/><path d="M186 196h28" stroke="#D99A33" stroke-width="6" stroke-linecap="round"/>',
+ 'olive-oil': '<path d="M196 300c0-56 8-96 8-96h-8c0-32 10-44 4-64" fill="none" stroke="#5c6b3c" stroke-width="7" stroke-linecap="round"/><path d="M204 204c22-10 44-6 56 10-20 12-44 10-56-10Zm0-30c-22-12-46-8-58 8 20 12 46 10 58-8Z" fill="none" stroke="#5c6b3c" stroke-width="6"/><circle cx="232" cy="238" r="9" fill="#A6472E"/><circle cx="172" cy="208" r="9" fill="#2A2018"/>',
+ 'gourmet-salt': '<path d="M168 214l30-46 34 12 8 40-30 32-38-12Z" fill="none" stroke="#7f8fa0" stroke-width="7"/><path d="M240 268l22-30 28 10 6 28-24 22-30-10Z" fill="none" stroke="#7f8fa0" stroke-width="6"/><path d="M148 276l16-22 24 8 4 20-18 18-24-8Z" fill="none" stroke="#7f8fa0" stroke-width="5"/>',
+ 'spice': '<path d="M156 232h88l-10 62a10 10 0 0 1-10 8h-48a10 10 0 0 1-10-8Z" fill="none" stroke="#A6472E" stroke-width="7"/><path d="M236 156l28 48-16 10-26-44" fill="none" stroke="#A6472E" stroke-width="7" stroke-linecap="round"/><circle cx="168" cy="204" r="5" fill="#D99A33"/><circle cx="188" cy="196" r="5" fill="#D99A33"/><circle cx="208" cy="202" r="5" fill="#D99A33"/>',
+ 'coffee': '<path d="M150 216h104v34a34 34 0 0 1-34 34h-36a34 34 0 0 1-34-34Z" fill="none" stroke="#6b4a2e" stroke-width="7"/><path d="M254 228c20-2 32 10 28 24s-24 18-32 10" fill="none" stroke="#6b4a2e" stroke-width="6"/><path d="M184 190c-8-16 8-24 2-40m30 40c-8-16 8-24 2-40" fill="none" stroke="#6b4a2e" stroke-width="6" stroke-linecap="round"/><ellipse cx="296" cy="300" rx="14" ry="9" transform="rotate(-24 296 300)" fill="none" stroke="#D99A33" stroke-width="5"/>',
+ 'health-wellness': '<path d="M200 296c-56-18-64-74-36-112 10 44 22 60 36 78 14-18 26-34 36-78 28 38 20 94-36 112Z" fill="none" stroke="#5c7a52" stroke-width="7"/><path d="M200 282v40" stroke="#5c7a52" stroke-width="7" stroke-linecap="round"/>',
+}
+def art_html(p, prefix=''):
+    svg = _CAT_MOTIFS.get(p.get('cat',''), _CAT_MOTIFS['tea'])
+    return ('<span class="cat-art" role="img" aria-label="Product illustration">'
+      '<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">'
+      '<rect width="400" height="400" fill="#F3EADA"/>'
+      '<circle cx="66" cy="84" r="120" fill="rgba(217,154,51,.10)"/>'
+      '<circle cx="356" cy="330" r="150" fill="rgba(166,71,46,.07)"/>'
+      + svg + '</svg></span>')
+
 def img_path(p, prefix=''):
     f = IMG_EXT.get(p['slug'])
     if f: return prefix + 'images/products/' + f
@@ -146,6 +166,13 @@ def head(title, desc, prefix, extra=''):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rustic Earth Tea &amp; Spice Co.">
+<meta property="og:title" content="{esc(title)}">
+<meta property="og:description" content="{esc(desc)}">
+<meta property="og:image" content="https://stewiefeh.github.io/rustic-earth-co-redesign/images/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2A2018">
 <link rel="icon" type="image/png" href="{prefix}images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -258,7 +285,7 @@ def price_badge(price):
 def prod_card(p, prefix, subval=None):
     ip = img_path(p, prefix)
     thumb = (f'<img src="{ip}" alt="{esc(p["name"])}" loading="lazy">' if ip
-             else f'<span class="nophoto-wrap">{tag_icon()}</span>')
+             else art_html(p))
     nophoto = '' if ip else ' nophoto'
     subattr = f' data-subcat="{esc(subval)}"' if subval else ''
     return f'''<a class="p-card"{subattr} href="{prefix}products/{p['slug']}/">
@@ -305,7 +332,8 @@ def product_page(p, depth=2):
     cat_name = CAT_NAMES.get(p['cat'], 'Shop')
     cat_href = (prefix + 'shop/' + p['cat'] + '.html') if p['cat'] != 'shop-all' else (prefix + 'shop/all-items.html')
     ip = img_path(p, prefix)
-    photo = (f'<img src="{ip}" alt="{esc(p["name"])}">' if ip
+    art = art_html(p)
+    photo = (f'{art}' if ip
              else tag_icon())
     nophoto = '' if ip else ' nophoto'
     desc_paras = ''.join(f'<p>{esc(s.strip())}</p>' for s in re.split(r'\n+', p['desc'] or '') if s.strip())
@@ -683,6 +711,27 @@ def main():
         write(f'shop/{cat}.html', cat_page(cat, depth=1))
     write('shop/all-items.html', all_items_page(depth=1))
     write('cart.html', cart_page(depth=0))
+    # sitemap, robots, custom 404 (concept by Stephen Fehon)
+    base = 'https://stewiefeh.github.io/rustic-earth-co-redesign/'
+    urls = [('', '1.0'), ('shop/shop-all.html', '0.9')]
+    for s, n, _ in CATS: urls.append((f'shop/{s}.html', '0.9'))
+    urls += [('locations/index.html','0.7'),('locations/dennis.html','0.6'),('locations/berlin.html','0.6'),('jobs/index.html','0.6')]
+    for p in sorted(M.values(), key=lambda x: x['slug']):
+        urls.append((f"products/{p['slug']}/", '0.8'))
+    sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    for u, pr in urls:
+        sm += f'  <url><loc>{base}{u}</loc><priority>{pr}</priority></url>\n'
+    sm += '</urlset>\n'
+    with open('sitemap.xml','w') as fh: fh.write(sm)
+    with open('robots.txt','w') as fh: fh.write('User-agent: *\nAllow: /\nSitemap: ' + base + 'sitemap.xml\n')
+    nf = head('Page not found | Rustic Earth Tea & Spice Co.', 'That page is not here. Browse the shelves or head back to the shop.', '') + header('', active='') + f'''
+<div class="wrap" style="padding:72px 22px;text-align:center">
+  <h1>That page is not on the shelf</h1>
+  <p>The link you followed leads nowhere. The shop is one click away.</p>
+  <p style="margin-top:18px"><a class="btn btn-primary" href="index.html">Back to the shop</a></p>
+</div>
+''' + footer('')
+    write('404.html', nf)
     for p in M.values():
         write(f"products/{p['slug']}/index.html", product_page(p, depth=2))
     write('locations/index.html', locations_index(depth=1))

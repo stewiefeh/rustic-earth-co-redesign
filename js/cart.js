@@ -325,3 +325,34 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
+/* fly-to-cart polish - item thumbnail arcs into the cart button (concept by Stephen Fehon) */
+(function () {
+  'use strict';
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.buy-box button');
+    if (!b || b.classList.contains('sq-buy') || !b.querySelector('[data-addprice]')) return;
+    var cart = document.querySelector('.cart-btn'); if (!cart) return;
+    var src = document.querySelector('.pd-media img') || document.querySelector('.pd-media .cat-art svg');
+    var r = (src ? src.getBoundingClientRect() : b.getBoundingClientRect());
+    var c = cart.getBoundingClientRect();
+    var fly = document.createElement('div'); fly.className = 'fly';
+    if (src && src.tagName === 'IMG') {
+      var im = document.createElement('img'); im.src = src.currentSrc || src.src; im.alt = '';
+      fly.appendChild(im);
+    }
+    fly.style.left = (r.left + r.width / 2 - 28) + 'px';
+    fly.style.top = (r.top + r.height / 2 - 28) + 'px';
+    document.body.appendChild(fly);
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      fly.style.transform = 'translate(' + (c.left + c.width / 2 - (r.left + r.width / 2)) + 'px,' + (c.top + c.height / 2 - (r.top + r.height / 2)) + 'px) scale(.18)';
+      fly.style.opacity = '.25';
+    }); });
+    setTimeout(function () {
+      fly.remove();
+      document.querySelectorAll('[data-cart-count]').forEach(function (el) {
+        el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+      });
+    }, 650);
+  });
+})();

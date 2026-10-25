@@ -107,3 +107,21 @@
     }
   });
 })();
+
+/* motion polish - stagger reveals and fade product images in (concept by Stephen Fehon) */
+(function () {
+  var run = function () {
+    var groups = new Map();
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      var p = el.parentElement, n = groups.get(p) || 0; groups.set(p, n + 1);
+      el.style.setProperty('--d', Math.min(n, 7) * 70 + 'ms');
+    });
+    document.querySelectorAll('.p-thumb img, .pd-media img').forEach(function (im) {
+      if (im.complete && im.naturalWidth > 0) { im.classList.add('ld'); return; }
+      im.addEventListener('load', function () { im.classList.add('ld'); });
+      im.addEventListener('error', function () { im.classList.add('ld'); });
+    });
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+})();

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://stewiefeh.github.io/rustic-earth-co-redesign/sitemap.xml
