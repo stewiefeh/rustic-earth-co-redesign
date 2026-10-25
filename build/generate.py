@@ -263,7 +263,7 @@ def footer(prefix):
 <script src="{prefix}js/main.js?v=8" defer></script>
 <script src="{prefix}js/square-links.js?v=1" defer></script>
 <script src="{prefix}js/account.js?v=1" defer></script>
-<script src="{prefix}js/cart.js?v=5" defer></script>
+<script src="{prefix}js/cart.js?v=6" defer></script>
 </body>
 </html>
 '''

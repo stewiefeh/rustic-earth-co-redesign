@@ -235,6 +235,14 @@
     var place = document.querySelector('[data-place]');
     if (place) place.addEventListener('click', placeOrder);
     render();
+    var acct = window.RE_ACCT && window.RE_ACCT.user ? window.RE_ACCT.user() : null;
+    if (acct) {
+      var cf = document.querySelector('[data-ccontact]');
+      if (cf && !cf.value) {
+        var d = (acct.phone || '').replace(/\D/g, '').replace(/^1/, '');
+        cf.value = d.length === 10 ? '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6) : acct.phone;
+      }
+    }
   }
 
   function placeOrder() {
