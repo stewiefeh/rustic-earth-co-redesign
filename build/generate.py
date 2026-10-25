@@ -262,7 +262,7 @@ def footer(prefix):
 </footer>
 <script src="{prefix}js/main.js?v=8" defer></script>
 <script src="{prefix}js/square-links.js?v=1" defer></script>
-<script src="{prefix}js/account.js?v=1" defer></script>
+<script src="{prefix}js/account.js?v=2" defer></script>
 <script src="{prefix}js/cart.js?v=6" defer></script>
 </body>
 </html>
@@ -451,8 +451,8 @@ def cart_page(depth=1):
     <p class="cart-fine">Shipping is free over $75. Below that, the shop quotes exact shipping when they confirm your order.</p>
     <div class="cart-contact">
       <h2>Your details</h2>
-      <label>Name<input data-cname type="text" autocomplete="name" placeholder="Your name"></label>
-      <label>Phone or email<input data-ccontact type="text" autocomplete="tel email" placeholder="So they can confirm"></label>
+      <label>Name<input data-cname type="text" autocomplete="name"></label>
+      <label>Phone or email<input data-ccontact type="text" autocomplete="tel email" placeholder="(555) 123-4567 or you@email.com"></label>
     </div>
     <button class="btn btn-primary place-btn" data-place>Place order by email</button>
     <a class="btn btn-ghost call-btn" style="color:var(--bark);border-color:rgba(42,32,24,.4)" href="tel:+1{PHONE.replace('-','')}">Call your order in: {PHONE}</a>

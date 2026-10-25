@@ -12,11 +12,24 @@
   var modal = null;
   var lastFocus = null;
 
+  var REG = 're-account-registry-v1';
   function load() {
     try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { return null; }
   }
+  function registry() {
+    try { return JSON.parse(localStorage.getItem(REG)) || {}; } catch (e) { return {}; }
+  }
   function save() {
-    try { user ? localStorage.setItem(KEY, JSON.stringify(user)) : localStorage.removeItem(KEY); } catch (e) {}
+    try {
+      if (user) {
+        localStorage.setItem(KEY, JSON.stringify(user));
+        var r = registry();
+        r[user.phone] = user;
+        localStorage.setItem(REG, JSON.stringify(r));
+      } else {
+        localStorage.removeItem(KEY);
+      }
+    } catch (e) {}
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
@@ -115,9 +128,9 @@
     } else if (step === 'phone') {
       b.innerHTML =
         '<h2>Enter your phone number</h2>' +
-        '<p class="acct-sub">We use it to tie your orders together.</p>' +
+        '<p class="acct-sub" id="acct-phone-help">We use it to tie your orders together.</p>' +
         '<div class="acct-phoneline"><span class="acct-cc">+1 (US)</span>' +
-          '<input class="acct-input" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 123-4567" aria-label="Phone number"></div>' +
+          '<input class="acct-input" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 123-4567" aria-label="Phone number" aria-describedby="acct-phone-help"></div>' +
         '<div class="acct-row"><button class="acct-pill" type="button" data-act="send" disabled>Next</button>' +
         '<button class="acct-link" type="button" data-act="cancel">Cancel</button></div>';
       var inp = b.querySelector('.acct-input');
@@ -138,8 +151,8 @@
       b.innerHTML =
         '<h2>Enter your code</h2>' +
         '<p class="acct-sub">Six digits to finish signing in.</p>' +
-        '<input class="acct-input acct-code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" aria-label="Six digit code">' +
-        '<p class="acct-err" hidden>That code doesn\u2019t match. Try again.</p>' +
+        '<input class="acct-input acct-code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" aria-label="Six digit code" aria-describedby="acct-code-err">' +
+        '<p class="acct-err" id="acct-code-err" role="alert" hidden>That code doesn\u2019t match. Try again.</p>' +
         '<p class="acct-demo">Demo mode shows your code here: <strong>' + code + '</strong>. Live, it arrives by text.</p>' +
         '<div class="acct-row"><button class="acct-pill" type="button" data-act="verify" disabled>Verify</button>' +
         '<button class="acct-link" type="button" data-act="back">Back</button></div>';
@@ -154,8 +167,10 @@
       });
       ci.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !ver.disabled) ver.click(); });
       ver.addEventListener('click', function () {
-        if (ci.value !== code) { err.hidden = false; ci.value = ''; ver.disabled = true; ci.focus(); return; }
-        user = { phone: pendingPhone, since: new Date().toISOString(), orders: [] };
+        if (ci.value !== code) { err.hidden = false; ci.setAttribute('aria-invalid', 'true'); ci.value = ''; ver.disabled = true; ci.focus(); return; }
+        ci.removeAttribute('aria-invalid');
+        var r = registry();
+        user = r[pendingPhone] || { phone: pendingPhone, since: new Date().toISOString(), orders: [] };
         save(); syncBtn();
         render('account');
       });
