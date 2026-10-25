@@ -179,7 +179,7 @@ def head(title, desc, prefix, extra=''):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,640&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{prefix}css/style.css">
+<link rel="stylesheet" href="{prefix}css/style.css?v=2">
 {extra}</head>
 <body data-root="{prefix}">
 '''
@@ -257,9 +257,9 @@ def footer(prefix):
     <span>Site concept by Stephen Fehon.</span>
   </div>
 </footer>
-<script src="{prefix}js/main.js?v=2" defer></script>
+<script src="{prefix}js/main.js?v=3" defer></script>
 <script src="{prefix}js/square-links.js?v=1" defer></script>
-<script src="{prefix}js/cart.js?v=3" defer></script>
+<script src="{prefix}js/cart.js?v=4" defer></script>
 </body>
 </html>
 '''

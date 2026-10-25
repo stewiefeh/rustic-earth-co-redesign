@@ -292,7 +292,8 @@
       box.appendChild(btn);
       function upd() {
         var sel = box.querySelector('[data-variant]');
-        var v = sel ? (RE_VARIANTS || []).filter(function (x) { return x.id === sel.value; })[0] : (RE_VARIANTS || [])[0];
+        var VR = window.RE_VARIANTS || [];
+        var v = sel ? VR.filter(function (x) { return x.id === sel.value; })[0] : VR[0];
         var link = v && SQ[v.sku];
         if (link) { btn.hidden = false; btn.dataset.href = link; btn.textContent = 'Buy with Square'; }
         else { btn.hidden = true; }
