@@ -612,3 +612,6 @@ header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
   .fly{display:none}
   .js .p-thumb img,.js .pd-media img{opacity:1;transform:none;transition:none}
 }
+
+/* v5.1 failsafe: force a stalled reveal visible (see main.js) */
+html.v5css .reveal.rvforce{animation:none !important;opacity:1 !important;transform:none !important;transition:none !important}

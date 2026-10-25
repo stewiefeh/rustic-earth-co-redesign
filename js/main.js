@@ -186,3 +186,26 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
   else run();
 })();
+
+/* v5.1 failsafe: a reveal element may never stay invisible while in view.
+   Normal scroll-driven reveals never hit this (an element 30% up the viewport
+   is already past its entry range); it only fires if a browser's scroll
+   timeline stalls, so content can never be lost to a motion quirk. */
+(function(){
+  try{
+    if(!document.documentElement.classList.contains('v5css')) return;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var quiet=0, timer=setInterval(function(){
+      var pending=document.querySelectorAll('.reveal:not(.rvforce)');
+      if(!pending.length){ if(++quiet>=3) clearInterval(timer); return; }
+      quiet=0;
+      pending.forEach(function(el){
+        var r=el.getBoundingClientRect();
+        if(r.top<innerHeight*0.7 && r.bottom>0 &&
+           parseFloat(getComputedStyle(el).opacity)<0.05){
+          el.classList.add('rvforce');
+        }
+      });
+    },800);
+  }catch(e){}
+})();
