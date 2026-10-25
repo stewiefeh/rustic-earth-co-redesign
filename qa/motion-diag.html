@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion diag | Rustic Earth QA</title>
 <script>document.documentElement.classList.add('js');try{if(CSS.supports('animation-timeline','view()'))document.documentElement.classList.add('v5css')}catch(e){}</script>
-<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/style.css?v=9">
 <style>body{padding:0}#out{font:13px/1.5 monospace;white-space:pre-wrap;background:#fff;color:#111;padding:14px;border:2px solid #A6472E;margin:16px 0;max-width:900px}.probe{padding:18px;margin:12px 0;max-width:520px}</style>
 </head><body>
 <main style="padding:24px">
@@ -27,9 +27,8 @@ function rep(tag){
 }
 addEventListener('load',()=>{
   rep('load (scroll 0)');
-  setTimeout(()=>{scrollTo(0,900);setTimeout(()=>rep('after scroll 900'),700);},900);
-  setTimeout(()=>{scrollTo(0,2400);setTimeout(()=>rep('after scroll 2400'),700);},2400);
-  setTimeout(()=>{scrollTo(0,0);setTimeout(()=>rep('back to 0'),700);},3800);
-  setInterval(()=>rep('live'),1500);
+  let step=0;const seq=[900,2400,0];
+  function cycle(){const y=seq[step%3];step++;scrollTo(0,y);setTimeout(()=>rep('scrolled to '+y),700);}
+  setInterval(cycle,2600);rep('load (scroll 0)');
 });
 </script></body></html>
