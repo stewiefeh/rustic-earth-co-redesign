@@ -78,6 +78,7 @@ _CAT_MOTIFS = {
  'gourmet-salt': '<path d="M168 214l30-46 34 12 8 40-30 32-38-12Z" fill="none" stroke="#7f8fa0" stroke-width="7"/><path d="M240 268l22-30 28 10 6 28-24 22-30-10Z" fill="none" stroke="#7f8fa0" stroke-width="6"/><path d="M148 276l16-22 24 8 4 20-18 18-24-8Z" fill="none" stroke="#7f8fa0" stroke-width="5"/>',
  'spice': '<path d="M156 232h88l-10 62a10 10 0 0 1-10 8h-48a10 10 0 0 1-10-8Z" fill="none" stroke="#A6472E" stroke-width="7"/><path d="M236 156l28 48-16 10-26-44" fill="none" stroke="#A6472E" stroke-width="7" stroke-linecap="round"/><circle cx="168" cy="204" r="5" fill="#D99A33"/><circle cx="188" cy="196" r="5" fill="#D99A33"/><circle cx="208" cy="202" r="5" fill="#D99A33"/>',
  'coffee': '<path d="M150 216h104v34a34 34 0 0 1-34 34h-36a34 34 0 0 1-34-34Z" fill="none" stroke="#6b4a2e" stroke-width="7"/><path d="M254 228c20-2 32 10 28 24s-24 18-32 10" fill="none" stroke="#6b4a2e" stroke-width="6"/><path d="M184 190c-8-16 8-24 2-40m30 40c-8-16 8-24 2-40" fill="none" stroke="#6b4a2e" stroke-width="6" stroke-linecap="round"/><ellipse cx="296" cy="300" rx="14" ry="9" transform="rotate(-24 296 300)" fill="none" stroke="#D99A33" stroke-width="5"/>',
+ 'shop-all': '<path d="M168 172l62-38 100 62-56 92-106-52Z" fill="none" stroke="#D99A33" stroke-width="7"/><circle cx="206" cy="180" r="9" fill="#A6472E"/><path d="M296 152c20-12 38-8 48 6" fill="none" stroke="#A6472E" stroke-width="5" stroke-linecap="round"/>',
  'health-wellness': '<path d="M200 296c-56-18-64-74-36-112 10 44 22 60 36 78 14-18 26-34 36-78 28 38 20 94-36 112Z" fill="none" stroke="#5c7a52" stroke-width="7"/><path d="M200 282v40" stroke="#5c7a52" stroke-width="7" stroke-linecap="round"/>',
 }
 def art_html(p, prefix=''):
@@ -91,8 +92,9 @@ def art_html(p, prefix=''):
 
 def img_path(p, prefix=''):
     f = IMG_EXT.get(p['slug'])
-    if f: return prefix + 'images/products/' + f
-    return prefix + 'images/products/placeholder.png'
+    if f: return prefix+'images/products/'+f
+    cat = p.get('cat','') if p.get('cat','') in _CAT_MOTIFS else 'shop-all'
+    return prefix+'images/cat/'+cat+'.svg'
 
 CATS = [
   ('tea', 'Tea', 'Loose-leaf black, green, herbal and white teas, scooped to order.'),
@@ -732,6 +734,11 @@ def main():
 </div>
 ''' + footer('')
     write('404.html', nf)
+    import os as _os
+    _os.makedirs('images/cat', exist_ok=True)
+    for _n, _b in _CAT_MOTIFS.items():
+        with open(f'images/cat/{_n}.svg','w') as _fh:
+            _fh.write('<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="400" fill="#F3EADA"/><circle cx="66" cy="84" r="120" fill="rgba(217,154,51,.10)"/><circle cx="356" cy="330" r="150" fill="rgba(166,71,46,.07)"/>'+_b+'</svg>')
     for p in M.values():
         write(f"products/{p['slug']}/index.html", product_page(p, depth=2))
     write('locations/index.html', locations_index(depth=1))
