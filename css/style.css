@@ -698,3 +698,8 @@ html:not(.js) .acct-btn{display:none}
 .nav-row{display:block;text-align:center;text-wrap:balance;padding:6px 12px 12px}
 .nav-row a{display:inline-block;margin:.3rem .5rem}
 .nav-row a{font-size:.86rem;letter-spacing:.06em}
+
+/* ----- footer payment badges ----- */
+.pay-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;max-width:1180px;margin:0 auto;padding:18px 0 4px}
+.pay-badge{width:40px;height:26px;border-radius:5px;background:#fff;overflow:hidden;display:inline-flex;flex:0 0 auto;box-shadow:0 1px 3px rgba(20,14,8,.4)}
+.pay-badge svg{width:40px;height:26px;display:block}
