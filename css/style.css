@@ -79,6 +79,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .nav-row a:hover,.nav-row a[aria-current]{color:var(--turmeric);border-color:var(--turmeric)}
 @media(max-width:720px){
   .nav-row{flex-wrap:wrap;justify-content:center;gap:.4rem 1.05rem;overflow-x:visible;padding:8px 14px 12px}
+  .hero{min-height:64vh}
   .nav-row a{padding-bottom:3px}
   .head-inner{padding-top:10px}
   .brand img{width:46px;height:46px}
