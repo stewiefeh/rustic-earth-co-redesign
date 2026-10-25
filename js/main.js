@@ -125,3 +125,40 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
   else run();
 })();
+
+/* motion pass two - ingredients ribbon, condensed header, magnetic buttons (concept by Stephen Fehon) */
+(function () {
+  var fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var run = function () {
+    var hero = document.querySelector('.hero');
+    if (hero && !document.querySelector('.ribbon')) {
+      var words = ['Loose-leaf tea', 'House spice blends', 'Flavored sea salts', 'Aged balsamic', 'Local raw honey', 'Small-batch coffee', 'Craft snack sticks'];
+      var leaf = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-5-6-8-9-8-13a8 8 0 0 1 16 0c0 4-3 7-8 13Z" fill="none" stroke="#A6472E" stroke-width="2"/></svg>';
+      var group = '';
+      for (var i = 0; i < words.length; i++) group += leaf + '<em>' + words[i] + '</em>';
+      var ribbon = document.createElement('div');
+      ribbon.className = 'ribbon'; ribbon.setAttribute('aria-hidden', 'true');
+      ribbon.innerHTML = '<div class="ribbon-track">' + group + group + '</div>';
+      hero.parentNode.insertBefore(ribbon, hero.nextSibling);
+    }
+    var head = document.querySelector('header');
+    if (head) {
+      var onScroll = function () { head.classList.toggle('scrolled', window.scrollY > 10); };
+      window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    }
+    if (fine && !calm) {
+      document.querySelectorAll('.btn-primary').forEach(function (btn) {
+        btn.addEventListener('mousemove', function (e) {
+          var r = btn.getBoundingClientRect();
+          var dx = (e.clientX - r.left - r.width / 2) * 0.12;
+          var dy = (e.clientY - r.top - r.height / 2) * 0.25;
+          btn.style.transform = 'translate(' + Math.max(-6, Math.min(6, dx)) + 'px,' + Math.max(-4, Math.min(4, dy)) + 'px)';
+        });
+        btn.addEventListener('mouseleave', function () { btn.style.transform = ''; });
+      });
+    }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+})();

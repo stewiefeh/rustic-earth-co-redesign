@@ -291,7 +291,7 @@ def prod_card(p, prefix, subval=None):
     nophoto = '' if ip else ' nophoto'
     subattr = f' data-subcat="{esc(subval)}"' if subval else ''
     return f'''<a class="p-card"{subattr} href="{prefix}products/{p['slug']}/">
-  <span class="p-thumb{nophoto}">{stock_badge(p['stock'])}<span class="p-price">{price_badge(p['price'])}</span>{thumb}</span>
+  <span class="p-thumb{nophoto}">{stock_badge(p['stock'])}{thumb}</span>
   <span class="p-info"><span class="name">{esc(p['name'])}</span>{price_html(p['price'])}</span>
 </a>
 '''

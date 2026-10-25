@@ -348,6 +348,7 @@
       fly.style.transform = 'translate(' + (c.left + c.width / 2 - (r.left + r.width / 2)) + 'px,' + (c.top + c.height / 2 - (r.top + r.height / 2)) + 'px) scale(.18)';
       fly.style.opacity = '.25';
     }); });
+    b.classList.remove('added-pulse'); void b.offsetWidth; b.classList.add('added-pulse');
     setTimeout(function () {
       fly.remove();
       document.querySelectorAll('[data-cart-count]').forEach(function (el) {
