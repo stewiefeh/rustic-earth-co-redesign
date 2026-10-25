@@ -695,5 +695,6 @@ html:not(.js) .acct-btn{display:none}
 .head-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .acct-btn{border-width:1.5px;border-color:rgba(243,234,218,.4);padding:13px 18px}
 @media(max-width:720px){.acct-btn{padding:11px 12px}}
-.nav-row{gap:.4rem 1.05rem}
+.nav-row{display:block;text-align:center;text-wrap:balance;padding:6px 12px 12px}
+.nav-row a{display:inline-block;margin:.3rem .5rem}
 .nav-row a{font-size:.86rem;letter-spacing:.06em}

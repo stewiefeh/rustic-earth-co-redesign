@@ -181,7 +181,7 @@ def head(title, desc, prefix, extra=''):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,640&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{prefix}css/style.css?v=13">
+<link rel="stylesheet" href="{prefix}css/style.css?v=14">
 {extra}</head>
 <body data-root="{prefix}">
 '''
