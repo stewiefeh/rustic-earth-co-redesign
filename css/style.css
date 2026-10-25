@@ -449,3 +449,19 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
   .drawer,.drawer-backdrop{transition:none}
   .ship-bar{transition:none}
 }
+
+/* ----- header v2: one top row (brand + cart), full nav below ----- */
+.head-top{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{flex-direction:row;align-items:center;gap:12px;text-align:left}
+.cart-btn{margin-left:0}
+.nav-row{flex-wrap:wrap;justify-content:center;overflow-x:visible;gap:.4rem 1.3rem;width:100%}
+@media(max-width:720px){.head-top{gap:10px}.brand{gap:10px}}
+/* ----- price badge on product photos ----- */
+.p-thumb .stock{top:10px;left:10px;right:auto;bottom:auto}
+.p-price{position:absolute;right:10px;bottom:10px;z-index:2;background:rgba(42,32,24,.92);color:var(--cream);font:600 .78rem/1 var(--sans);letter-spacing:.02em;padding:6px 10px;border-radius:999px;border:1px solid rgba(243,234,218,.28);pointer-events:none}
+.p-card:hover .p-price{background:var(--turmeric);color:var(--bark-deep);border-color:transparent}
+/* ----- Square buttons ----- */
+.sq-buy{margin-top:10px}
+.sq-pay{display:inline-block;margin-left:10px;font:600 .8rem var(--sans);color:var(--paprika);text-decoration:underline;text-underline-offset:3px}
+/* ----- kicker: eyebrow caps -> serif italic line ----- */
+.hero-kicker{color:var(--turmeric);font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.05rem;text-transform:none;letter-spacing:.01em}

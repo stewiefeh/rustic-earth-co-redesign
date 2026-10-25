@@ -167,19 +167,21 @@ def header(prefix, active=''):
         ext = ' target="_blank" rel="noopener"' if href.startswith('http') else ''
         links += f'<a href="{href}"{cur}{ext}>{label}</a>\n'
     return f'''<a class="visually-hidden" href="#main">Skip to content</a>
-<div class="promo"><strong>Free shipping</strong> on all orders over $75 &middot; two shops in South Jersey</div>
+<div class="promo"><strong>Free shipping</strong> on all orders over $75. Two shops in South Jersey</div>
 <header class="site-head" id="siteHead">
   <div class="head-inner">
+    <div class="head-top">
     <a class="brand" href="{prefix}index.html" aria-label="Rustic Earth Tea &amp; Spice Co. home">
       <img src="{prefix}images/logo-mark.png" alt="Rustic Earth Tea &amp; Spice Co. stamp logo" width="56" height="56">
       <span class="wordmark">Rustic Earth<small>Tea &amp; Spice Co.</small></span>
     </a>
+      <a class="cart-btn" href="{prefix}cart.html" aria-label="View cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8Z"/><path d="M9 7V5.6A3 3 0 0 1 12 3a3 3 0 0 1 3 2.6V7"/></svg>
+        <span class="cart-count" data-cart-count hidden>0</span>
+      </a>
+    </div>
     <nav class="nav-row" aria-label="Primary">
 {links}    </nav>
-    <a class="cart-btn" href="{prefix}cart.html" aria-label="View cart">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8Z"/><path d="M9 7V5.6A3 3 0 0 1 12 3a3 3 0 0 1 3 2.6V7"/></svg>
-      <span class="cart-count" data-cart-count hidden>0</span>
-    </a>
   </div>
 </header>
 <main id="main" class="pagein">
@@ -227,7 +229,8 @@ def footer(prefix):
   </div>
 </footer>
 <script src="{prefix}js/main.js?v=2" defer></script>
-<script src="{prefix}js/cart.js?v=2" defer></script>
+<script src="{prefix}js/square-links.js?v=1" defer></script>
+<script src="{prefix}js/cart.js?v=3" defer></script>
 </body>
 </html>
 '''
@@ -245,6 +248,13 @@ def stock_badge(stock):
     cls = 'out' if 'Out' in s else 'low'
     return f'<span class="stock {cls}">{esc(s)}</span>'
 
+def price_badge(price):
+    if not price: return 'Ask in store'
+    parts = [q.strip().replace('$', '') for q in price.split('-')]
+    if len(parts) == 2 and parts[1]:
+        return f'${esc(parts[0])} &ndash; ${esc(parts[1])}'
+    return f'${esc(parts[0])}'
+
 def prod_card(p, prefix, subval=None):
     ip = img_path(p, prefix)
     thumb = (f'<img src="{ip}" alt="{esc(p["name"])}" loading="lazy">' if ip
@@ -252,7 +262,7 @@ def prod_card(p, prefix, subval=None):
     nophoto = '' if ip else ' nophoto'
     subattr = f' data-subcat="{esc(subval)}"' if subval else ''
     return f'''<a class="p-card"{subattr} href="{prefix}products/{p['slug']}/">
-  <span class="p-thumb{nophoto}">{stock_badge(p['stock'])}{thumb}</span>
+  <span class="p-thumb{nophoto}">{stock_badge(p['stock'])}<span class="p-price">{price_badge(p['price'])}</span>{thumb}</span>
   <span class="p-info"><span class="name">{esc(p['name'])}</span>{price_html(p['price'])}</span>
 </a>
 '''

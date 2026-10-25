@@ -201,6 +201,11 @@
         return;
       }
       root.innerHTML = c.map(function (i) { return lineHTML(i, true); }).join('');
+      c.forEach(function (i) {
+        var btn = root.querySelector('[data-drm="' + i.id + '"]');
+        var lineEl = btn && btn.closest('.line');
+        if (lineEl) sqForLine(lineEl, i);
+      });
       if (side) {
         side.hidden = false;
         var subEl = document.querySelector('[data-subtotal]');
@@ -271,10 +276,48 @@
     });
   }
 
+
+  /* ---------- Square checkout links ---------- */
+  var SQ = window.RE_SQUARE_LINKS || {};
+  function initSquare() {
+    var box = document.querySelector('.buy-box');
+    if (box) {
+      var btn = document.createElement('button');
+      btn.className = 'btn btn-ghost sq-buy';
+      btn.hidden = true;
+      btn.type = 'button';
+      btn.addEventListener('click', function () {
+        if (btn.dataset.href) window.open(btn.dataset.href, '_blank', 'noopener');
+      });
+      box.appendChild(btn);
+      function upd() {
+        var sel = box.querySelector('[data-variant]');
+        var v = sel ? (RE_VARIANTS || []).filter(function (x) { return x.id === sel.value; })[0] : (RE_VARIANTS || [])[0];
+        var link = v && SQ[v.sku];
+        if (link) { btn.hidden = false; btn.dataset.href = link; btn.textContent = 'Buy with Square'; }
+        else { btn.hidden = true; }
+      }
+      box.addEventListener('change', upd);
+      upd();
+    }
+  }
+  function sqForLine(rootEl, item) {
+    var link = SQ[item.sku];
+    if (!link) return;
+    var anchor = document.createElement('a');
+    anchor.className = 'sq-pay';
+    anchor.href = link;
+    anchor.target = '_blank';
+    anchor.rel = 'noopener';
+    anchor.textContent = 'Pay with Square';
+    var total = rootEl.querySelector('.line-total');
+    if (total) total.parentNode.insertBefore(anchor, total);
+  }
   function init() {
     document.documentElement.classList.remove('no-js');
     sync();
     initProduct();
+    initSquare();
     initCartPage();
     initLoop();
     buildDrawer();
