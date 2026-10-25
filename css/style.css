@@ -332,7 +332,12 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .site-foot .fineprint{margin-top:36px;padding-top:18px;border-top:1px solid rgba(243,234,218,.14);font-size:.8rem;color:#8d8172;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 /* ---------- scroll reveals (progressive) ---------- */
-.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.22,.61,.21,1) calc(var(--di,0)*70ms),transform .7s cubic-bezier(.22,.61,.21,1) calc(var(--di,0)*70ms)}
+.js .reveal{opacity:0;transform:translateY(30px)}
+.js .reveal.reveal-s{transform:translateY(30px) scale(.955)}
+.js .reveal.reveal-l{transform:translateX(-36px)}
+.js .reveal.reveal-r{transform:translateX(36px)}
+.js .reveal,.js .reveal.reveal-s,.js .reveal.reveal-l,.js .reveal.reveal-r{
+  transition:opacity .8s var(--eoq) calc(var(--di,0)*80ms),transform .8s var(--eoq) calc(var(--di,0)*80ms)}
 .js .reveal.done{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   .js .reveal{opacity:1 !important;transform:none !important;animation:none !important}
@@ -526,3 +531,35 @@ header.hid{transform:translateY(-110%)}
   .p-card .price{transition:transform .35s var(--ease)}
   .p-card:hover .price{transform:translateX(4px)}
 }
+
+
+/* ===== motion system v4 (concept by Stephen Fehon) ===== */
+:root{
+  --eo:cubic-bezier(.16,.84,.28,.99);
+  --eoq:cubic-bezier(.2,.7,.25,1);
+  --spring:cubic-bezier(.34,1.4,.5,1);
+  --d1:.18s;--d2:.4s;--d3:.8s;
+}
+/* scroll-linked, compositor-driven where supported: progress bar + hero depth */
+@supports (animation-timeline:scroll()){
+  #scrollBar{animation:barfill linear both;animation-timeline:scroll(root);animation-duration:1ms}
+  .hero .hero-copy{animation:copydrift linear both;animation-timeline:scroll(root);animation-range:0 95vh;animation-duration:1ms}
+}
+@keyframes barfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes copydrift{to{transform:translateY(13%);opacity:.35}}
+/* drawer + backdrop get spring easing */
+.drawer{transition:transform .45s var(--spring)}
+.drawer-backdrop{transition:opacity .35s ease}
+/* control feedback: chips, quantities, inputs, footer links */
+.chip:active{transform:scale(.94)}
+.qty-btn{transition:background .15s,transform .12s var(--eo)}
+.qty-btn:active{transform:scale(.9)}
+.site-foot form input{transition:border-color .25s,box-shadow .25s var(--eo)}
+.site-foot form input:focus{border-color:var(--turmeric);box-shadow:0 0 0 3px rgba(217,154,51,.22)}
+.site-foot a{transition:color .2s,padding-left .25s var(--eo)}
+.site-foot a:hover{padding-left:6px}
+/* location + category cards mirror the product-card hover language */
+.loc-card .cat-label{transition:transform .4s var(--eo)}
+.loc-card:hover .cat-label{transform:translateY(-4px)}
+.cat-card .cat-label .count{display:block;transition:transform .4s var(--eo)}
+.cat-card:hover .cat-label{transform:translateY(-3px)}

@@ -4,15 +4,17 @@
   html.classList.add('js');
   html.classList.remove('no-js');
 
-  /* header state + scroll progress */
+  /* header state + scroll progress (CSS-driven where supported, JS fallback) */
   var head = document.getElementById('siteHead');
+  var cssScroll = false;
+  try { cssScroll = window.CSS && CSS.supports('animation-timeline', 'scroll()'); } catch (e) {}
   var bar = document.createElement('div');
   bar.id = 'scrollBar'; document.body.appendChild(bar);
   var lastY = window.scrollY;
   function onScroll() {
     var y = window.scrollY;
     var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    bar.style.transform = 'scaleX(' + Math.min(1, y / max) + ')';
+    if (!cssScroll) bar.style.transform = 'scaleX(' + Math.min(1, y / max) + ')';
     if (head) {
       head.classList.toggle('scrolled', y > 40);
       if (y > 160 && y > lastY + 2) head.classList.add('hid');

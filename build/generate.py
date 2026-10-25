@@ -179,7 +179,7 @@ def head(title, desc, prefix, extra=''):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,640&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{prefix}css/style.css?v=3">
+<link rel="stylesheet" href="{prefix}css/style.css?v=4">
 {extra}</head>
 <body data-root="{prefix}">
 '''
@@ -257,7 +257,7 @@ def footer(prefix):
     <span>Site concept by Stephen Fehon.</span>
   </div>
 </footer>
-<script src="{prefix}js/main.js?v=4" defer></script>
+<script src="{prefix}js/main.js?v=5" defer></script>
 <script src="{prefix}js/square-links.js?v=1" defer></script>
 <script src="{prefix}js/cart.js?v=4" defer></script>
 </body>
@@ -488,7 +488,7 @@ def locations_index(depth=1):
     cards = ''
     for key, L in LOCS.items():
         addr = f"{L['street']}, {L['city']}, NJ {L['zip']}"
-        cards += f'''<article class="loc-card reveal">
+        cards += f'''<article class="loc-card reveal reveal-l">
   <div class="loc-body" data-hours='{esc(L["hours_json"])}' data-badge-host=".loc-body">
     <h3><a href="{prefix}locations/{key}.html">{esc(L["name"])}</a></h3>
     <p class="loc-line"><strong>{esc(L["town"])}, NJ</strong></p>
@@ -645,7 +645,7 @@ def index_page():
         t = thumb_for(slug)
         cnt = sum(1 for p in M.values() if p['cat'] == slug)
         img = f'<img src="{t}" alt="" loading="lazy">' if t else ''
-        cat_cards += f'''<a class="cat-card reveal" href="{prefix}shop/{slug}.html">
+        cat_cards += f'''<a class="cat-card reveal reveal-s" href="{prefix}shop/{slug}.html">
   {img}<span class="cat-label"><span class="name">{esc(name)}</span><br><span class="count">{cnt} items</span></span>
 </a>
 '''
@@ -679,7 +679,7 @@ def index_page():
 </section>
 <section class="section">
   <div class="wrap split">
-    <img class="reveal" src="{prefix}images/products/abb-bee-s-wildflower-12oz.jpeg" alt="A jar of ABB-Bee's wildflower honey with a wooden dipper" loading="lazy" onerror="this.src='{prefix}images/hero.png'">
+    <img class="reveal reveal-r" src="{prefix}images/products/abb-bee-s-wildflower-12oz.jpeg" alt="A jar of ABB-Bee's wildflower honey with a wooden dipper" loading="lazy" onerror="this.src='{prefix}images/hero.png'">
     <div class="reveal">
       <p class="kicker">From the hive</p>
       <h2>Raw honey from a neighbor's hives</h2>
@@ -696,7 +696,7 @@ def index_page():
       <p>Dennisville: the original counter on U.S. 9, Friday through Sunday. Berlin: a stall inside the Berlin Farmers Market, Thursday through Sunday. Come taste before you buy; that's what the spoons are for.</p>
       <a class="btn btn-primary" style="margin-top:18px" href="{prefix}locations/index.html">Hours &amp; directions</a>
     </div>
-    <img class="reveal" src="{prefix}images/hero.png" alt="Rustic Earth's counter" loading="lazy">
+    <img class="reveal reveal-l" src="{prefix}images/hero.png" alt="Rustic Earth's counter" loading="lazy">
   </div>
 </section>
 '''.replace(' loading="lazy"', '') + footer(prefix)
