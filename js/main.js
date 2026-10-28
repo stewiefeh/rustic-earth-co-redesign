@@ -51,7 +51,7 @@
           io.unobserve(en.target);
         }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    }, { rootMargin: '0px 0px 10% 0px', threshold: 0 });
     reveals.forEach(function (el) { io.observe(el); });
   } else {
     reveals.forEach(function (el) { el.classList.add('done', 'settled'); });

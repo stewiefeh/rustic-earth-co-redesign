@@ -521,7 +521,7 @@ header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
 /* --- reveals, modern browsers: scroll-driven, per element --- */
 @supports (animation-timeline:view()){
   @media(prefers-reduced-motion:no-preference){
-    .reveal{animation:rv-up var(--m-slow) var(--m-in) backwards;animation-timeline:view();animation-range:entry 0% entry 55%}
+    .reveal{animation:rv-up var(--m-slow) var(--m-in) backwards;animation-timeline:view();animation-range:entry 0% entry 30%}
     .reveal.reveal-s{animation-name:rv-scale}
     .reveal.reveal-l{animation-name:rv-left}
     .reveal.reveal-r{animation-name:rv-right}
@@ -596,10 +596,7 @@ header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
 .ribbon-track em{font-family:Fraunces,serif;font-style:italic;font-size:1.05rem;color:var(--bark);white-space:nowrap}
 @keyframes ribbonslide{to{transform:translateX(-50%)}}
 
-/* --- cross-page: crossfade between pages where supported --- */
-@media(prefers-reduced-motion:no-preference){
-  @view-transition{navigation:auto}
-}
+/* cross-page crossfade removed: the mid-navigation blend read as a broken page */
 
 /* --- reduced motion: the finished page, instantly --- */
 @media(prefers-reduced-motion:reduce){
