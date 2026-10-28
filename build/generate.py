@@ -213,7 +213,7 @@ def header(prefix, active=''):
     ico_pin = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21c-5-6-8-9-8-13a8 8 0 0 1 16 0c0 4-3 7-8 13Z"/><circle cx="12" cy="8" r="2.6"/></svg>'
     ico_cart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8Z"/><path d="M9 7V5.6A3 3 0 0 1 12 3a3 3 0 0 1 3 2.6V7"/></svg>'
     ico_more = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="4" width="6.4" height="6.4" rx="1.6"/><rect x="13.6" y="4" width="6.4" height="6.4" rx="1.6"/><rect x="4" y="13.6" width="6.4" height="6.4" rx="1.6"/><rect x="13.6" y="13.6" width="6.4" height="6.4" rx="1.6"/></svg>'
-    tabs = (tab(prefix + 'shop-all.html', 'Shop', ico_shop, on=shop_on)
+    tabs = (tab(prefix + 'shop/all-items.html', 'Shop', ico_shop, on=shop_on)
           + tab(prefix + 'locations/index.html', 'Visit', ico_pin, on=loc_on)
           + tab(prefix + 'cart.html', 'Cart', ico_cart, badge=True)
           + tab('', 'More', ico_more, more=True))
@@ -227,7 +227,7 @@ def header(prefix, active=''):
             s = '<li><a href="' + href + '"' + cur + e + ' style="--i:' + str(i[0]) + '">' + label + cnt + '</a></li>\n'
         i[0] += 1
         return s
-    shop_rows = row('All Items', prefix + 'shop-all.html')
+    shop_rows = row('All Items', prefix + 'shop/all-items.html')
     for slug, name, _ in CATS:
         cnt = sum(1 for p in M.values() if p['cat'] == slug)
         shop_rows += row(name, prefix + 'shop/' + slug + '.html', cnt)
