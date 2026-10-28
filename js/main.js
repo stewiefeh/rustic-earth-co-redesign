@@ -17,8 +17,8 @@
     if (!cssScroll) bar.style.transform = 'scaleX(' + Math.min(1, y / max) + ')';
     if (head) {
       head.classList.toggle('scrolled', y > 40);
-      if (y > 160 && y > lastY + 2) head.classList.add('hid');
-      else if (y < lastY - 2 || y <= 160) head.classList.remove('hid');
+      if (y > 160 && y > lastY + 8) head.classList.add('hid');
+      else if (y < lastY - 8 || y <= 160) head.classList.remove('hid');
     }
     lastY = y;
   }
@@ -201,4 +201,42 @@
       });
     },800);
   }catch(e){}
+
+  /* More sheet: the mobile tab bar's bottom drawer */
+  var moreBtn = document.querySelector('[data-more-btn]');
+  var moreSheet = document.getElementById('moreSheet');
+  if (moreBtn && moreSheet) {
+    var moreOpen = false, moreReturn = null;
+    var openMore = function () {
+      if (moreOpen) return;
+      moreOpen = true;
+      moreReturn = document.activeElement;
+      moreSheet.hidden = false;
+      void moreSheet.offsetWidth; /* flush so the transition plays */
+      moreSheet.classList.add('open');
+      document.documentElement.classList.add('locked');
+      moreBtn.setAttribute('aria-expanded', 'true');
+      setTimeout(function () {
+        var f = moreSheet.querySelector('a,button');
+        if (f) f.focus({ preventScroll: true });
+      }, 140);
+    };
+    var closeMore = function () {
+      if (!moreOpen) return;
+      moreOpen = false;
+      moreSheet.classList.remove('open');
+      document.documentElement.classList.remove('locked');
+      moreBtn.setAttribute('aria-expanded', 'false');
+      setTimeout(function () {
+        moreSheet.hidden = true;
+        if (moreReturn && moreReturn.focus) moreReturn.focus({ preventScroll: true });
+      }, 430);
+    };
+    moreBtn.addEventListener('click', openMore);
+    var closers = moreSheet.querySelectorAll('[data-more-close]');
+    Array.prototype.forEach.call(closers, function (el) { el.addEventListener('click', closeMore); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && moreOpen) closeMore();
+    });
+  }
 })();

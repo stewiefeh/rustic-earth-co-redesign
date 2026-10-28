@@ -495,7 +495,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 @keyframes barfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 /* --- smart header --- */
-header{transition:transform .4s var(--m-soft),box-shadow .35s ease}
+header{transition:transform .5s cubic-bezier(.32,.72,0,1),box-shadow .35s ease}
 header.hid{transform:translateY(-110%)}
 header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
 
@@ -706,4 +706,76 @@ html:not(.js) .acct-btn{display:none}
 /* ----- v4b: payment badges balance 4 across 2 rows on small screens ----- */
 @media(max-width:479px){
   .pay-row{display:grid;grid-template-columns:repeat(4,auto);justify-content:center;gap:8px}
+}
+
+/* ----- v5.2: mobile tab bar + More sheet ----- */
+.tabbar{display:none}
+@media(max-width:720px){
+  html.js .tabbar{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:var(--bark-deep);
+    border-top:1px solid rgba(243,234,218,.14);
+    padding:7px 6px calc(9px + env(safe-area-inset-bottom,0px));
+  }
+  html.js .nav-row{display:none}
+  html.js .site-foot{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+}
+.tabbar a,.tabbar .tab-more{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  padding:3px 2px;background:none;border:0;cursor:pointer;
+  color:rgba(243,234,218,.72);text-decoration:none;
+  font:700 .6rem/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;
+}
+.tabbar svg{width:21px;height:21px}
+.tabbar .is-on{color:var(--turmeric)}
+.tabbar .is-on svg{stroke-width:2}
+.tab-cart{position:relative}
+.tab-badge{position:absolute;top:-2px;right:calc(50% - 21px);min-width:16px;height:16px;padding:0 4px;border-radius:9px;background:var(--turmeric);color:#2A2018;font:700 .6rem/16px var(--sans);letter-spacing:0;text-align:center}
+.tab-more{transition:transform .2s var(--m-in)}
+.tab-more:active{transform:scale(.92)}
+
+/* the More sheet */
+.more{position:fixed;inset:0;z-index:80}
+.more-backdrop{position:absolute;inset:0;background:rgba(20,14,8,.62);opacity:0;transition:opacity .35s ease}
+.more-panel{
+  position:absolute;left:0;right:0;bottom:0;max-height:88dvh;overflow:auto;-webkit-overflow-scrolling:touch;
+  background:linear-gradient(180deg,#3a2c1e,var(--bark) 260px);
+  color:var(--cream);
+  border-radius:20px 20px 0 0;
+  box-shadow:0 -24px 60px rgba(20,14,8,.55);
+  padding:6px 24px calc(30px + env(safe-area-inset-bottom,0px));
+  transform:translateY(103%);
+  transition:transform .55s cubic-bezier(.32,.72,0,1);
+}
+.more.open .more-backdrop{opacity:1}
+.more.open .more-panel{transform:translateY(0)}
+.more-handle{width:44px;height:4px;border-radius:3px;background:rgba(243,234,218,.28);margin:10px auto 12px}
+.more-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 4px}
+.more-head .wordmark{color:var(--cream)}
+.more-close{width:38px;height:38px;flex:0 0 auto;border-radius:50%;border:1.5px solid rgba(243,234,218,.35);background:none;color:var(--cream);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .25s var(--m-in),border-color .25s}
+.more-close svg{width:15px;height:15px}
+.more-close:active{transform:scale(.88);border-color:var(--turmeric)}
+.more-eyebrow{font:700 .64rem var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--turmeric);margin:16px 0 2px}
+.more-list{list-style:none;margin:0;padding:0}
+.more-list a,.more-list button{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;width:100%;
+  padding:11px 2px;background:none;border:0;border-bottom:1px solid rgba(243,234,218,.1);
+  color:var(--cream);text-decoration:none;text-align:left;cursor:pointer;
+  font:500 1.22rem/1.25 var(--serif);
+  opacity:0;transform:translateY(14px);
+}
+.more-list li:last-child a,.more-list li:last-child button{border-bottom:none}
+.more-list .m-count{font:600 .68rem var(--sans);letter-spacing:.08em;color:rgba(243,234,218,.55)}
+.more.open .more-list a,.more.open .more-list button{
+  opacity:1;transform:translateY(0);
+  transition:opacity .45s ease,transform .45s var(--m-in);
+  transition-delay:calc(var(--i) * 26ms + 90ms);
+}
+.more-list a:active,.more-list button:active{color:var(--turmeric)}
+html.locked{overflow:hidden}
+@media(prefers-reduced-motion:reduce){
+  .more-backdrop{transition:none}
+  .more-panel{transition:none;transform:none}
+  .more-list a,.more-list button{opacity:1;transform:none;transition:none}
 }

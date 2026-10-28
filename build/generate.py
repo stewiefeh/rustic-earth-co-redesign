@@ -181,7 +181,7 @@ def head(title, desc, prefix, extra=''):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,640&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{prefix}css/style.css?v=20">
+<link rel="stylesheet" href="{prefix}css/style.css?v=21">
 {extra}</head>
 <body data-root="{prefix}">
 '''
@@ -197,6 +197,46 @@ def header(prefix, active=''):
         cur = ' aria-current="page"' if label == active else ''
         ext = ' target="_blank" rel="noopener"' if href.startswith('http') else ''
         links += f'<a href="{href}"{cur}{ext}>{label}</a>\n'
+
+    shop_on = active == 'Shop All' or active in [c[1] for c in CATS]
+    loc_on = active == 'Locations'
+    def tab(href, label, icon, on=False, badge=False, more=False):
+        cls = []
+        if on: cls.append('is-on')
+        if more: cls.append('tab-more')
+        if badge: cls.append('tab-cart')
+        c = (' class="' + ' '.join(cls) + '"') if cls else ''
+        if more:
+            return ('<button class="' + ' '.join(cls) + '" type="button" data-more-btn aria-expanded="false" aria-controls="moreSheet">' + icon + '<span>' + label + '</span></button>\n')
+        return ('<a href="' + href + '"' + c + (' aria-current="page"' if on else '') + '>' + icon + ('<span class="tab-badge" data-cart-count hidden>0</span>' if badge else '') + '<span>' + label + '</span></a>\n')
+    ico_shop = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 20v-8"/><path d="M12 12C12 8 9 5 5 5c0 4 3 7 7 7Z"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7Z"/></svg>'
+    ico_pin = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21c-5-6-8-9-8-13a8 8 0 0 1 16 0c0 4-3 7-8 13Z"/><circle cx="12" cy="8" r="2.6"/></svg>'
+    ico_cart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8Z"/><path d="M9 7V5.6A3 3 0 0 1 12 3a3 3 0 0 1 3 2.6V7"/></svg>'
+    ico_more = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="4" width="6.4" height="6.4" rx="1.6"/><rect x="13.6" y="4" width="6.4" height="6.4" rx="1.6"/><rect x="4" y="13.6" width="6.4" height="6.4" rx="1.6"/><rect x="13.6" y="13.6" width="6.4" height="6.4" rx="1.6"/></svg>'
+    tabs = (tab(prefix + 'shop-all.html', 'Shop', ico_shop, on=shop_on)
+          + tab(prefix + 'locations/index.html', 'Visit', ico_pin, on=loc_on)
+          + tab(prefix + 'cart.html', 'Cart', ico_cart, badge=True)
+          + tab('', 'More', ico_more, more=True))
+    def row(label, href, count=None, ext=False, btn=False, i=[0]):
+        cur = ' aria-current="page"' if label == active else ''
+        e = ' target="_blank" rel="noopener"' if ext else ''
+        cnt = '<span class="m-count">' + str(count) + '</span>' if count is not None else ''
+        if btn:
+            s = '<li><button type="button" data-acct-btn style="--i:' + str(i[0]) + '">' + label + '</button></li>\n'
+        else:
+            s = '<li><a href="' + href + '"' + cur + e + ' style="--i:' + str(i[0]) + '">' + label + cnt + '</a></li>\n'
+        i[0] += 1
+        return s
+    shop_rows = row('All Items', prefix + 'shop-all.html')
+    for slug, name, _ in CATS:
+        cnt = sum(1 for p in M.values() if p['cat'] == slug)
+        shop_rows += row(name, prefix + 'shop/' + slug + '.html', cnt)
+    visit_rows = row('Locations', prefix + 'locations/index.html')         + row('Dennis, NJ', prefix + 'locations/dennis.html')         + row('Berlin, NJ', prefix + 'locations/berlin.html')         + row('Work with us', prefix + 'jobs/index.html')
+    else_rows = row('Gift Card', GIFT, ext=True)         + row('Sign in', '', btn=True)         + row('Call ' + PHONE, 'tel:+1' + PHONE.replace('-', ''))         + row('Email the shop', 'mailto:' + EMAIL)
+    sheet = ('<h5 class="more-eyebrow">Shop</h5>\n<ul class="more-list">' + shop_rows + '</ul>\n'
+             '<h5 class="more-eyebrow">Visit</h5>\n<ul class="more-list">' + visit_rows + '</ul>\n'
+             '<h5 class="more-eyebrow">Good to know</h5>\n<ul class="more-list">' + else_rows + '</ul>\n')
+
     return f'''<a class="visually-hidden" href="#main">Skip to content</a>
 <div class="promo"><strong>Free shipping</strong> on all orders over $75. Two shops in South Jersey</div>
 <header class="site-head" id="siteHead">
@@ -218,6 +258,17 @@ def header(prefix, active=''):
 {links}    </nav>
   </div>
 </header>
+<nav class="tabbar" aria-label="Mobile">{tabs}</nav>
+<div class="more" id="moreSheet" hidden>
+  <div class="more-backdrop" data-more-close></div>
+  <div class="more-panel" role="dialog" aria-modal="true" aria-label="More menu">
+    <div class="more-handle" aria-hidden="true"></div>
+    <div class="more-head">
+      <span class="wordmark">Rustic Earth<small>Tea &amp; Spice Co.</small></span>
+      <button class="more-close" type="button" data-more-close aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+{sheet}  </div>
+</div>
 <main id="main" class="pagein">
 '''
 
@@ -280,7 +331,7 @@ def footer(prefix):
     <span>Site concept by Stephen Fehon.</span>
   </div>
 </footer>
-<script src="{prefix}js/main.js?v=10" defer></script>
+<script src="{prefix}js/main.js?v=11" defer></script>
 <script src="{prefix}js/square-links.js?v=1" defer></script>
 <script src="{prefix}js/account.js?v=2" defer></script>
 <script src="{prefix}js/cart.js?v=6" defer></script>
