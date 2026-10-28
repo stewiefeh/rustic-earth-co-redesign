@@ -466,14 +466,11 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
    down on a shelf. Reveals settle in under ~550ms with a slight
    overshoot, travel stays under 20px, and every scroll effect runs on
    the compositor so scrolling never janks.
-   Reveals are per-element scroll-driven animations (animation-timeline:
-   view()) where the browser supports them: each element animates as it
-   enters the viewport, so grids stagger themselves by scroll position
-   with no JavaScript. The fill mode is backwards and keyframes only
-   define the from-state, so the finished state is the element's own:
-   hover transforms keep working after a card lands, and content is
-   never hidden where the timeline is unsupported. Older browsers get
-   the IntersectionObserver fallback in main.js. Reduced-motion users
+   Reveals are one-shot: the IntersectionObserver in main.js adds .done
+   exactly once per element, so content fades in as it arrives and never
+   fades back out when you scroll the other way. Hover transitions keep
+   working after a card lands (.settled hands the transition back), and
+   content is never hidden where JavaScript is off. Reduced-motion users
    get the finished page instantly. */
 
 :root{
@@ -512,35 +509,20 @@ header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
   .hero-copy>*:nth-child(3){animation-delay:.24s}
   .hero-copy>*:nth-child(4){animation-delay:.33s}
   @keyframes rise{from{opacity:0;transform:translateY(20px)}}
-  @supports (animation-timeline:scroll()){
-    .hero .hero-copy{animation:copydrift linear both;animation-timeline:scroll(root);animation-range:0 90vh;animation-duration:1ms}
-  }
-  @keyframes copydrift{to{transform:translateY(12%);opacity:.35}}
 }
 
-/* --- reveals, modern browsers: scroll-driven, per element --- */
-@supports (animation-timeline:view()){
-  @media(prefers-reduced-motion:no-preference){
-    .reveal{animation:rv-up var(--m-slow) var(--m-in) backwards;animation-timeline:view();animation-range:entry 0% entry 30%}
-    .reveal.reveal-s{animation-name:rv-scale}
-    .reveal.reveal-l{animation-name:rv-left}
-    .reveal.reveal-r{animation-name:rv-right}
-  }
-}
-@keyframes rv-up{from{opacity:0;transform:translateY(18px)}}
-@keyframes rv-scale{from{opacity:0;transform:scale(.965)}}
-@keyframes rv-left{from{opacity:0;transform:translateX(-22px)}}
-@keyframes rv-right{from{opacity:0;transform:translateX(22px)}}
+/* --- reveals: one-shot. The observer adds .done exactly once; content
+   never fades back out on the way up, so scrolling can never flicker. --- */
 
 /* --- reveals, older browsers: the observer adds .done, then .settled
        once the settle has run so hover transitions take back over --- */
 @media(prefers-reduced-motion:no-preference){
-  html.js:not(.v5css) .reveal{opacity:0;transform:translateY(18px);transition:opacity var(--m-slow) var(--m-soft) calc(var(--di,0)*70ms),transform var(--m-slow) var(--m-soft) calc(var(--di,0)*70ms)}
-  html.js:not(.v5css) .reveal.reveal-s{transform:scale(.965)}
-  html.js:not(.v5css) .reveal.reveal-l{transform:translateX(-22px)}
-  html.js:not(.v5css) .reveal.reveal-r{transform:translateX(22px)}
-  html.js:not(.v5css) .reveal.done{opacity:1;transform:none;transition-delay:0ms}
-  html.js:not(.v5css) .reveal.settled{transition:none}
+  html.js .reveal{opacity:0;transform:translateY(18px);transition:opacity var(--m-slow) var(--m-soft) calc(var(--di,0)*70ms),transform var(--m-slow) var(--m-soft) calc(var(--di,0)*70ms)}
+  html.js .reveal.reveal-s{transform:scale(.965)}
+  html.js .reveal.reveal-l{transform:translateX(-22px)}
+  html.js .reveal.reveal-r{transform:translateX(22px)}
+  html.js .reveal.done{opacity:1;transform:none;transition-delay:0ms}
+  html.js .reveal.settled{transition:none}
 }
 
 /* --- photos: pop once loaded, no flash --- */
@@ -611,7 +593,7 @@ header.scrolled{box-shadow:0 8px 22px rgba(20,14,8,.14)}
 }
 
 /* v5.1 failsafe: force a stalled reveal visible (see main.js) */
-html.v5css .reveal.rvforce{animation:none !important;opacity:1 !important;transform:none !important;transition:none !important}
+.reveal.rvforce{animation:none !important;opacity:1 !important;transform:none !important;transition:none !important}
 
 /* ============================================================
    Account: sign in with a phone number (concept by Stephen Fehon)

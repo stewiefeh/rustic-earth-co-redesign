@@ -29,13 +29,8 @@
      scroll-driven animations (no JS); elsewhere an IO pass does it.
      .settled drops the fallback transition once the settle has run so
      hover transitions take back over */
-  var v5css = false;
-  try { v5css = window.CSS && CSS.supports('animation-timeline', 'view()'); } catch (e) {}
-  if (v5css) html.classList.add('v5css');
   var reveals = [].slice.call(document.querySelectorAll('.reveal'));
-  if (v5css) {
-    /* CSS view() timelines drive the reveals; nothing to observe */
-  } else if (reveals.length && 'IntersectionObserver' in window) {
+  if (reveals.length && 'IntersectionObserver' in window) {
     var seen = new Map();
     reveals.forEach(function (el) {
       var p = el.parentElement, n = seen.get(p) || 0;
@@ -187,16 +182,14 @@
   else run();
 })();
 
-/* v5.1 failsafe: a reveal element may never stay invisible while in view.
-   Normal scroll-driven reveals never hit this (an element 30% up the viewport
-   is already past its entry range); it only fires if a browser's scroll
-   timeline stalls, so content can never be lost to a motion quirk. */
+/* failsafe: a reveal element may never stay invisible while in view. The
+   observer reveals elements just before they enter, so this only fires if
+   the observer itself stalled, so content can never be lost to a quirk. */
 (function(){
   try{
-    if(!document.documentElement.classList.contains('v5css')) return;
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var quiet=0, timer=setInterval(function(){
-      var pending=document.querySelectorAll('.reveal:not(.rvforce)');
+      var pending=document.querySelectorAll('.reveal:not(.rvforce):not(.done)');
       if(!pending.length){ if(++quiet>=3) clearInterval(timer); return; }
       quiet=0;
       pending.forEach(function(el){
